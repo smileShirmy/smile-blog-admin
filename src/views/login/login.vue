@@ -36,7 +36,7 @@ export default {
 
   methods: {
     login() {
-      // this.$router.push('/about')
+      this.$router.push('/about')
       this.$message.success('登录成功')
     }
   },
@@ -55,7 +55,7 @@ export default {
   justify-content: center;
   align-items: center;
   width: 100%;
-  height: 100vh;
+  height: 100%;
   background-color: rgba(0, 0, 0, .3);
 }
 

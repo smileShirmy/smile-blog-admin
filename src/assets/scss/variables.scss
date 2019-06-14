@@ -1,6 +1,6 @@
 /* theme
 -------------------------- */
-$theme-primary: #282c35;
+$theme-primary: #2b303b;
 
 $primary-light-0: #{lighten($theme-primary, 10%)};
 $primary-light-1: #{lighten($theme-primary, 20%)};
@@ -30,3 +30,9 @@ $font-color-base: $primary-light-1;
 -------------------------- */
 $border-color-dark: $theme-primary;
 $border-color-base: $primary-light-4;
+
+/* background-color
+-------------------------- */
+$background-color-header: #262626;
+$background-color-sidebar: #333;
+$background-color-main: #f2f2f2;
