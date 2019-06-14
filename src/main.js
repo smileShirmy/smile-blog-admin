@@ -4,8 +4,8 @@ import App from './App.vue'
 import router from './router'
 import store from './store'
 
-import '@/common/scss/index.scss'
-import '@/common/scss/element-variable.scss'
+import '@/assets/scss/index.scss'
+import '@/assets/scss/element-variable.scss'
 
 Vue.use(ElementUI)
 

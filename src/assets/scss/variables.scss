@@ -1,0 +1,32 @@
+/* theme
+-------------------------- */
+$theme-primary: #282c35;
+
+$primary-light-0: #{lighten($theme-primary, 10%)};
+$primary-light-1: #{lighten($theme-primary, 20%)};
+$primary-light-2: #{lighten($theme-primary, 30%)};
+$primary-light-3: #{lighten($theme-primary, 40%)};
+$primary-light-4: #{lighten($theme-primary, 50%)};
+$primary-light-5: #{lighten($theme-primary, 60%)};
+$primary-light-6: #{lighten($theme-primary, 70%)};
+$primary-light-7: #{lighten($theme-primary, 80%)};
+$primary-light-8: #{lighten($theme-primary, 90%)};
+$primary-light-9: #{lighten($theme-primary, 100%)};
+
+/* font-size
+-------------------------- */
+$font-size-extra-large: 20px !default;
+$font-size-large: 18px !default;
+$font-size-medium: 16px !default;
+$font-size-base: 14px !default;
+$font-size-small: 13px !default;
+$font-size-minimum: 11px !default;
+
+/* font-color
+-------------------------- */
+$font-color-base: $primary-light-1;
+
+/* border-color
+-------------------------- */
+$border-color-dark: $theme-primary;
+$border-color-base: $primary-light-4;
