@@ -25,6 +25,7 @@ $font-size-minimum: 11px !default;
 /* font-color
 -------------------------- */
 $font-color-base: $primary-light-1;
+$font-color-gray: #bbb;
 
 /* border-color
 -------------------------- */
@@ -36,3 +37,5 @@ $border-color-base: $primary-light-4;
 $background-color-header: #262626;
 $background-color-sidebar: #333;
 $background-color-main: #f2f2f2;
+
+$background-color-active: #444;

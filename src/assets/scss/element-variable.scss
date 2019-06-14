@@ -5,3 +5,50 @@ $--color-primary: #2b303b;
 $--font-path: '~element-ui/lib/theme-chalk/fonts';
 
 @import "~element-ui/packages/theme-chalk/src/index";
+
+@import './variables.scss';
+
+/* button
+-------------------------- */
+.el-button {
+  padding: 8px 16px;
+  border-radius: 2px;
+
+  &.is-round {
+    padding: 8px 16px;
+  }
+
+  &.el-button--mini {
+    padding: 5px 12px;
+  }
+
+  &.el-button--medium {
+    padding: 7px 12px;
+  }
+
+  &.el-button--small {
+    padding: 6px 12px;
+  }
+}
+
+/* menu
+-------------------------- */
+.el-menu-vertical-demo:not(.el-menu--collapse) {
+  width: 170px;
+  min-height: 400px;
+  background-color: $background-color-sidebar;
+}
+
+.el-menu {
+
+  .is-active {
+    background-color: $background-color-active;
+  }
+}
+
+.el-menu-item {
+
+  &:hover {
+    background-color: $background-color-active;
+  }
+}

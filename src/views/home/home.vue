@@ -1,10 +1,12 @@
 <template>
   <div class="home">
     <el-container class="home-container">
-      <el-header class="header">Header</el-header>
+      <el-header class="header">
+        <my-header></my-header>
+      </el-header>
       <el-container>
         <el-aside class="aside" width="170px">
-          <sidebar></sidebar>
+          <sidebar :isCollapse="isCollapse"></sidebar>
         </el-aside>
         <el-main class="main">
           <router-view></router-view>
@@ -15,11 +17,18 @@
 </template>
 
 <script>
-import { Sidebar } from '@/components/layout'
+import { Sidebar, MyHeader } from '@/components/layout'
 
 export default {
   components: {
-    Sidebar
+    Sidebar,
+    MyHeader
+  },
+
+  data() {
+    return {
+      isCollapse: false,
+    }
   }
 }
 </script>
@@ -35,7 +44,7 @@ export default {
   height: 100%;
 
   .header {
-    background: $background-color-header;
+    background-color: $background-color-header;
   }
 
   .aside {
@@ -52,6 +61,5 @@ export default {
     background-color: $background-color-main;
   }
 }
-
 
 </style>

@@ -2,13 +2,13 @@ import Utils from "@/services/utils/util";
 
 let homeRouter = [
   {
-    title: 'smile',
+    title: '概览',
     type: 'view',
     name: Symbol('about'),
     route: '/about',
     filePath: 'views/about/about.vue',
-    isNav: true,
-    icon: '',
+    inNav: true,
+    icon: 'el-icon-info',
     order: 0,
   },
   {
@@ -17,7 +17,7 @@ let homeRouter = [
     name: Symbol('404'),
     route: '/404',
     filePath: 'views/error-page/404.vue',
-    isNav: false,
+    inNav: false,
     icon: ''
   }
 ]
