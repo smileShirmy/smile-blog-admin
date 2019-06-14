@@ -1,6 +1,8 @@
 <template>
   <header class="header">
-    <div class="left"></div>
+    <div class="left">
+      <div class="logo">admin</div>
+    </div>
     <div class="right">
       <screenfull></screenfull>
       <span class="author">西麦</span>
@@ -16,7 +18,6 @@ export default {
   components: {
     Screenfull
   }
-  
 }
 </script>
 
@@ -31,6 +32,14 @@ export default {
   height: 100%;
   color: $font-color-gray;
   background: $background-color-header;
+
+  .left {
+    .logo {
+      color: #fff;
+      padding: 10px 20px 10px 0;
+      border-right: 1px solid #000;
+    }
+  }
 
   .right {
     display: flex;

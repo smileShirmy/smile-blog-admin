@@ -2,3 +2,15 @@ html, body {
   width: 100%;
   height: 100%;
 }
+
+a {
+  border-color: transparent;
+  color: transparent;
+  text-decoration-color: transparent;
+  
+  &:active {
+    border-color: transparent;
+    color: transparent;
+    text-decoration-color: transparent;
+  }
+}

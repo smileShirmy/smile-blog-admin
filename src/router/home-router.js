@@ -1,17 +1,17 @@
 import stageConfig from '@/config/stage'
 
-// 遍历配置树，子节点作为路由
-function deepTravel(config, func) {
+// 深度遍历配置树, 摘取叶子节点作为路由部分
+function deepTravel(config, fuc) {
   if (Array.isArray(config)) {
-    config.forEach(subConfig => {
-      deepTravel(subConfig, func)
+    config.forEach((subConfig) => {
+      deepTravel(subConfig, fuc)
     })
   } else if (config.children) {
-    config.children.forEach(subConfig => {
-      deepTravel(subConfig. func)
+    config.children.forEach((subConfig) => {
+      deepTravel(subConfig, fuc)
     })
   } else {
-    func(config)
+    fuc(config)
   }
 }
 

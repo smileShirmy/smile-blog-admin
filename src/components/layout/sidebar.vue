@@ -4,6 +4,9 @@
       class="el-menu-vertical-demo"
       :default-active="defaultActive"
       :collapse="isCollapse"
+      background-color="#333"
+      text-color="#bbb"
+      active-text-color="#fff"
       >
       <template v-for="item in sideBarList">
         <el-submenu
@@ -12,9 +15,9 @@
           :index="idMap[item.name]">
           <template
             slot="title">
-            <i class="menu-icon" v-if="!filterIcon(item.icon)" :class="item.icon"></i>
+            <i v-if="!filterIcon(item.icon)" :class="item.icon"></i>
             <img v-else :src="item.icon" class="imgIcon" />
-            <span class="menu-title" slot="title">{{item.title}}</span>
+            <span slot="title">{{item.title}}</span>
           </template>
 
           <!--二级菜单 -->
@@ -24,8 +27,8 @@
               :key="idMap[subItem.name]"
               :index="idMap[subItem.name]">
               <template slot="title">
-                <i class="menu-icon"></i>
-                <span class="menu-item" slot="title">{{subItem.title}}</span>
+                <i></i>
+                <span slot="title">{{subItem.title}}</span>
               </template>
 
               <!-- 三级菜单 -->
@@ -35,7 +38,7 @@
                 :to="grandchildItem.path"
                 class="circle third">
                 <el-menu-item :index="idMap[grandchildItem.name]" style="padding-left: 80px;">
-                  <span class="menu-title">{{grandchildItem.title}}</span>
+                  <span>{{grandchildItem.title}}</span>
                 </el-menu-item>
               </router-link>
             </el-submenu>
@@ -44,9 +47,10 @@
               <router-link
                 :to="subItem.path"
                 :key="subItem.name"
+                class="circle"
                 v-else>
                 <el-menu-item :index="idMap[subItem.name]" style="padding-left: 60px;">
-                  {{subItem.title}}
+                  <span>{{subItem.title}}</span>
                 </el-menu-item>
               </router-link>
 
@@ -60,9 +64,9 @@
           @click="goto(item.path)"
           :key="idMap[item.name]"
           >
-          <i class="menu-icon" v-if="!filterIcon(item.icon)" :class="item.icon"></i>
+          <i v-if="!filterIcon(item.icon)" :class="item.icon"></i>
           <img v-else :src="item.icon" class="imgIcon" />
-          <span class="menu-title" slot="title">{{item.title}}</span>
+          <span slot="title">{{item.title}}</span>
         </el-menu-item>
       </template>
     </el-menu>
@@ -140,16 +144,4 @@ export default {
 
 <style lang="scss" scoped>
 @import '@/assets/scss/variables.scss';
-
-.sidebar {
-
-  .menu-title {
-    color: $font-color-gray;
-  }
-  
-  .menu-icon {
-    color: $font-color-gray;
-    margin: 0 10px 0 5px;
-  }
-}
 </style>
