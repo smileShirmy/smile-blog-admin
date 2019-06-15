@@ -31,6 +31,21 @@ $--font-path: '~element-ui/lib/theme-chalk/fonts';
   }
 }
 
+/* layout
+-------------------------- */
+.el-main {
+  padding: 0;
+}
+
+/* layout
+-------------------------- */
+.el-form-item__label {
+  color: #333;
+  font-weight: 500;
+  padding: 0 20px 0 0;
+  font-size: 14px;
+}
+
 /* menu
 -------------------------- */
 .el-menu-vertical-demo:not(.el-menu--collapse) {

@@ -13,6 +13,18 @@ $primary-light-7: #{lighten($theme-primary, 80%)};
 $primary-light-8: #{lighten($theme-primary, 90%)};
 $primary-light-9: #{lighten($theme-primary, 100%)};
 
+/* z-index
+-------------------------- */
+$index-normal: 1 !default;
+$index-top: 1000 !default;
+$index-popper: 2000 !default;
+
+/* font-weight
+-------------------------- */
+$font-weight-primary: 400 !default;
+$font-weight-secondary: 100 !default;
+$font-weight-bold: 700 !default;
+
 /* font-size
 -------------------------- */
 $font-size-extra-large: 20px !default;
@@ -31,6 +43,7 @@ $font-color-gray: #bbb;
 -------------------------- */
 $border-color-dark: $theme-primary;
 $border-color-base: $primary-light-4;
+$border-color-light: $primary-light-6;
 
 /* background-color
 -------------------------- */
