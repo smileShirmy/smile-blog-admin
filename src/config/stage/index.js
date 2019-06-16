@@ -69,6 +69,4 @@ const deepReduceName = (target) => {
 
 deepReduceName(homeRouter)
 
-console.log(homeRouter)
-
 export default homeRouter

@@ -48,6 +48,10 @@ $--font-path: '~element-ui/lib/theme-chalk/fonts';
 
 /* menu
 -------------------------- */
+.el-menu {
+  border-right: 1px solid transparent;
+}
+
 .el-menu-vertical-demo:not(.el-menu--collapse) {
   width: $sidebar-width;
   text-align: left;

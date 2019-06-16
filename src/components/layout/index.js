@@ -1,7 +1,13 @@
 import Sidebar from './sidebar.vue'
-import MyHeader from './my-header.vue'
+import AppMain from './app-main.vue'
+import Breadcrumb from './breadcrumb.vue'
+import ReuseTab from './reuse-tab.vue'
+import NavBar from './nav-bar.vue'
 
 export {
   Sidebar,
-  MyHeader
+  AppMain,
+  Breadcrumb,
+  ReuseTab,
+  NavBar
 }
