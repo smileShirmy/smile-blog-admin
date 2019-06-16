@@ -163,6 +163,7 @@ export default {
     justify-content: center;
     align-items: center;
     padding: 0 1em;
+    font-size: $font-size-base;
     color: $font-color-gray;
 
     .title {
