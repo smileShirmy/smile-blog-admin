@@ -1,6 +1,6 @@
 <template>
   <div>
-    article list
+    user add
   </div>
 </template>
 
@@ -9,7 +9,3 @@ export default {
   
 }
 </script>
-
-<style lang="scss" scoped>
-
-</style>

@@ -50,6 +50,11 @@ $--font-path: '~element-ui/lib/theme-chalk/fonts';
 -------------------------- */
 .el-menu {
   border-right: 1px solid transparent;
+
+  .el-menu-item {
+    display: flex;
+    align-items: center;
+  }
 }
 
 .el-menu-vertical-demo:not(.el-menu--collapse) {

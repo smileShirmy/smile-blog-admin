@@ -1,6 +1,6 @@
 <template>
   <div>
-    article list
+    tag
   </div>
 </template>
 

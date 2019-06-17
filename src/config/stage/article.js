@@ -1,4 +1,4 @@
-const adminRouter = {
+const articleRouter = {
   route: null,
   name: null,
   title: '文章管理',
@@ -29,4 +29,4 @@ const adminRouter = {
   ]
 }
 
-export default adminRouter
+export default articleRouter

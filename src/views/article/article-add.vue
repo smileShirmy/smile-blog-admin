@@ -1,6 +1,6 @@
 <template>
   <div class="container">
-    <div class="title">添加文章</div>
+    <div class="view-title">添加文章</div>
     <div class="form-wrapper">
       <el-row>
         <el-col :lg="23" :md="23" :sm="24" :xs="24">
@@ -92,19 +92,10 @@ export default {
 
 <style lang="scss" scoped>
 @import "@/assets/scss/variables.scss";
+@import "@/assets/scss/mixin.scss";
 
-.title {
-  box-sizing: border-box;
-  display: flex;
-  justify-content: flex-start;
-  align-items: center;
-  width: 100%;
-  height: 50px;
-  margin-bottom: 20px;
-  padding-left: 20px;
-  font-weight: $font-weight-bold;
-  background: #fff;
-  border-bottom: 1px solid $border-color-light;
+.view-title {
+  @include view-common-title;
 }
 
 .form-wrapper {
