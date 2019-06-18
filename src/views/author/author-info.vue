@@ -10,7 +10,7 @@
       :rules="rules"
     >
       <el-form-item label="作者名" prop="name">
-        <el-input size="medium" clearable v-model="form.name"></el-input>
+        <el-input size="medium" clearable v-model="form.name" :disabled="!isEdited"></el-input>
       </el-form-item>
       <el-form-item label="邮箱" prop="email">
         <el-input
@@ -20,7 +20,7 @@
           auto-complete="new-password"
         ></el-input>
       </el-form-item>
-      <el-form-item label="密码" prop="password">
+      <el-form-item v-if="infoType === 'add'" label="密码" prop="password">
         <el-input
           type="password"
           size="medium"
@@ -29,7 +29,7 @@
           auto-complete="new-password"
         ></el-input>
       </el-form-item>
-      <el-form-item label="确认密码" prop="confirmPassword">
+      <el-form-item v-if="infoType === 'add'" label="确认密码" prop="confirmPassword">
         <el-input
           type="password"
           size="medium"
@@ -38,7 +38,16 @@
           autocomplete="off"
         ></el-input>
       </el-form-item>
-      <el-form-item>
+      <el-form-item label="作者描述" prop="desc">
+        <el-input
+          type="textarea"
+          v-model="form.desc"
+          clearable=""
+          :autosize="{ minRows: 6, maxRows: 8 }"
+          autocomplete="off"
+        ></el-input>
+      </el-form-item>
+      <el-form-item v-if="isSubmit">
         <el-button type="primary" @click="submitForm('form')">保 存</el-button>
         <el-button @click="resetForm('form')">重 置</el-button>
       </el-form-item>
@@ -48,6 +57,28 @@
 
 <script>
 export default {
+  props: {
+    isSubmit: {
+      type: Boolean,
+      default: true
+    },
+
+    infoType: {
+      type: String,
+      default: 'add'
+    },
+
+    authorInfo: {
+      type: Object,
+      defualt: () => {}
+    },
+
+    id: {
+      type: Number,
+      default: undefined  
+    }
+  },
+
   data() {
     const checkName = (rule, value, callback) => {
       if (!value) {
@@ -62,7 +93,7 @@ export default {
         callback(new Error('密码长度不能少于6位数'))
       } else {
         if (this.form.confirmPassword !== '') {
-          this.$refs.form.validateField('confirm_password')
+          this.$refs.form.validateField('confirmPassword')
         }
         callback()
       }
@@ -76,7 +107,14 @@ export default {
         callback()
       }
     }
+    const checkDesc = (rule, value, callback) => {
+      if (value === '') {
+        callback(new Error('请填写描述信息'))
+      }
+      callback()
+    }
     return {
+      isEdited: true,
       loading: false,
       form: {
         name: '',
@@ -106,6 +144,9 @@ export default {
         ],
         confirmPassword: [
           { validator: checkPassword2, trigger: 'blur', required: true },
+        ],
+        desc: [
+          { validator: checkDesc, trigger: 'blur', required: true },
         ]
       }
     }
@@ -115,7 +156,8 @@ export default {
     submitForm(formName) {
       this.$refs[formName].validate((valid) => {
         if (valid) {
-          console.log('通过校验')
+          const msg = '添加用户成功'
+          this.$message.success(`${msg}`)
         } else {
           this.$message.error('请填写正确的信息')
         }
@@ -124,8 +166,25 @@ export default {
     },
 
     resetForm(formName) {
-      this.$refs[formName].resetFields();
+      if (this.infoType === 'edit') {
+        this.setInfo()
+      } else {
+        this.$refs[formName].resetFields()
+      }
     },
+
+    setInfo() {
+      this.form.name = this.authorInfo.name
+      this.form.email = this.authorInfo.email
+      this.form.desc = this.authorInfo.desc
+    }
+  },
+
+  created() {
+    if (this.infoType === 'edit') {
+      this.setInfo()
+      this.isEdited = false
+    }
   }
 }
 </script>
