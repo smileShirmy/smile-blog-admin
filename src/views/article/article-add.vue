@@ -50,8 +50,8 @@
               ></el-input>
             </el-form-item>
             <el-form-item>
-              <el-button type="primary" @click="submitForm('form')">保存</el-button>
-              <el-button type="primary" @click="preview">预览</el-button>
+              <el-button type="primary" @click="submitForm('form')">保 存</el-button>
+              <el-button type="primary" @click="preview">预 览</el-button>
             </el-form-item>
           </el-form>
         </el-col>
