@@ -7,6 +7,7 @@
           :class="item.path === $route.path ? 'active' : ''"
           :to="item.path"
           @contextmenu.prevent.native="onTags">
+          <i v-if="!filterIcon(stageList[item.stageId].icon)" :class="stageList[item.stageId].icon"></i>
           <span class="title">{{ stageList[item.stageId].title | filterTitle }}</span>
           <span class="el-icon-close" @click.prevent.stop="close(index)" />
         </router-link>
@@ -111,6 +112,13 @@ export default {
       })
     },
 
+    filterIcon(icon) {
+      if (!icon) {
+        return false
+      }
+      return icon.indexOf('/') !== -1
+    },
+
     close(index) {
       // 检测是否是当前页, 如果是当前页则自动切换路由
       if (this.$route.path === this.histories[index].path) {
@@ -156,18 +164,16 @@ export default {
   display: flex;
   justify-content: flex-start;
   align-items: center;
+  margin-bottom: 2px;
 
   .reuse-tab-item {
     box-sizing: border-box;
-    display: flex;
-    justify-content: center;
-    align-items: center;
     padding: 0 1em;
     font-size: $font-size-base;
     color: $font-color-gray;
 
     .title {
-      margin-right: 5px;
+      margin: 0 5px;
     }
   }
 

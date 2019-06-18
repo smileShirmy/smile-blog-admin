@@ -38,6 +38,15 @@ let homeRouter = [
   article,
   author,
   tag,
+  {
+    title: '全局管理',
+    type: 'view',
+    name: Symbol('blog-config'),
+    route: '/blog-config',
+    filePath: 'views/blog-config/blog-config.vue',
+    inNav: true,
+    icon: 'el-icon-setting',
+  }
 ]
 
 // 处理顺序

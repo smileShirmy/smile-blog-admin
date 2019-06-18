@@ -272,7 +272,7 @@ $--font-path: '~element-ui/lib/theme-chalk/fonts';
   .el-submenu.is-active {
     .el-submenu__title {
       height: $menu-item-height;
-      background-color: #1d2a60 !important;
+      background-color: $menu-item-hover !important;
 
       i {
         color: #fff;
