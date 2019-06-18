@@ -1,7 +1,7 @@
 import Utils from "@/services/utils/util";
 import article from './article'
 import tag from './tag'
-import user from './user'
+import author from './author'
 
 /**
  * @param {String} type       类型 folder： 有子路由 / tab 在右侧以 tab： 形式展示 / view： 直接展示页面
@@ -36,7 +36,7 @@ let homeRouter = [
     icon: ''
   },
   article,
-  user,
+  author,
   tag,
 ]
 
