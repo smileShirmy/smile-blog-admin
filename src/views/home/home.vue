@@ -91,6 +91,7 @@ export default {
 .aside {
   overflow-x: hidden;
   background: $background-color-sidebar;
+  z-index: $index-normal;
 
    &::-webkit-scrollbar {
     width: 0px;

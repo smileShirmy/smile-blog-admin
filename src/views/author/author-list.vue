@@ -149,7 +149,7 @@ export default {
 .wrapper {
   box-sizing: border-box;
   width: 100%;
-  padding: 20px 30px;
+  margin: 20px 30px;
 }
 
 .dialog-body {

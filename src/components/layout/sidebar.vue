@@ -1,5 +1,6 @@
 <template>
   <div class="sidebar">
+    <div class="logo">smile</div> 
     <el-menu
       class="el-menu-vertical-demo"
       :default-active="defaultActive"
@@ -144,4 +145,14 @@ export default {
 
 <style lang="scss" scoped>
 @import '@/assets/scss/variables.scss';
+
+.logo {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 70px;
+  font-size: $font-size-extra-large;
+  letter-spacing: 1px;
+  color: #fff;
+}
 </style>

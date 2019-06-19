@@ -27,6 +27,7 @@
           clearable
           v-model="form.password"
           auto-complete="new-password"
+          show-password
         ></el-input>
       </el-form-item>
       <el-form-item v-if="infoType === 'add'" label="确认密码" prop="confirmPassword">
@@ -36,6 +37,7 @@
           clearable
           v-model="form.confirmPassword"
           autocomplete="off"
+          show-password
         ></el-input>
       </el-form-item>
       <el-form-item label="作者描述" prop="desc">
@@ -45,6 +47,8 @@
           clearable=""
           :autosize="{ minRows: 6, maxRows: 8 }"
           autocomplete="off"
+          maxlength="140"
+          show-word-limit
         ></el-input>
       </el-form-item>
       <el-form-item v-if="isSubmit">
