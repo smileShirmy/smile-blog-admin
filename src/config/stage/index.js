@@ -39,6 +39,15 @@ let homeRouter = [
   author,
   tag,
   {
+    title: '留言管理',
+    type: 'view',
+    name: 'view',
+    route: '/message',
+    filePath: 'views/message/message.vue',
+    inNav: true,
+    icon: 'el-icon-chat-dot-square',
+  },
+  {
     title: '全局管理',
     type: 'view',
     name: Symbol('blog-config'),

@@ -27,11 +27,18 @@
             <el-form-item label="作者">
               <el-select
                 v-model="form.author"
+                multiple
+                filterable
+                allow-create
                 size="medium"
                 placeholder="请选择作者"
               >
-                <el-option label="smile" value="smile"></el-option>
-                <el-option label="shirmy" value="shirmy"></el-option>
+                <el-option
+                  v-for="item in authors"
+                  :key="item.id"
+                  :label="item.label"
+                  :value="item.id">
+                </el-option>
               </el-select>
             </el-form-item>
             <el-form-item label="时间">
@@ -70,7 +77,16 @@ export default {
         pubTime: '',
         cover: '',
         content: ''
-      }
+      },
+      authors: [{
+        id: 1,
+        value: 'smile',
+        label: 'smile'
+      }, {
+        id: 2,
+        value: 'shirmy',
+        label: 'shirmy'
+      }],
     };
   },
 
