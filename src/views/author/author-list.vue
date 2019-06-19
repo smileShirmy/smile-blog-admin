@@ -10,7 +10,7 @@
               <el-button type="primary" size="mini" @click="editAuthor(scope.row)"
                 >编辑</el-button
               >
-              <el-button type="danger" size="mini" @click="deleteAuthor"
+              <el-button type="danger" size="mini" @click="deleteAuthor(scope.row)"
                 >删除</el-button
               >
             </template>
