@@ -4,12 +4,16 @@
       <el-table-column type="expand">
         <template slot-scope="props">
           <el-form
+            inline
             label-position="left"
-            label-width="50px"
+            label-width="80px"
             class="demo-table-expand"
           >
             <el-form-item label="分类">
               <span>{{ props.row.category }}</span>
+            </el-form-item>
+            <el-form-item label="浏览次数">
+              <span>{{ props.row.views }}</span>
             </el-form-item>
             <el-form-item label="标签">
               <span>{{ props.row.tag }}</span>
@@ -19,6 +23,9 @@
             </el-form-item>
             <el-form-item label="封面">
               <img class="cover" :src="props.row.cover">
+            </el-form-item>
+            <el-form-item label="评论数">
+              <span>{{ props.row.comments }}</span>
             </el-form-item>
           </el-form>
         </template>

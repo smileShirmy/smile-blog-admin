@@ -122,6 +122,8 @@ export default {
           open: 1,
           state: 1,
           likes: 3,
+          comments: 3,
+          views: 100,
         }
       ],
       categories: [
