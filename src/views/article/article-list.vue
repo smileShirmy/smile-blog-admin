@@ -205,6 +205,32 @@ export default {
         return
       }
       this[target] = id
+    },
+
+    editAritcle() {
+
+    },
+
+    openArticle() {
+
+    },
+
+    deleteArticle() {
+      this.$confirm('此操作将删除文章, 是否继续?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        this.$message({
+          type: 'success',
+          message: '删除成功!'
+        });
+      }).catch(() => {
+        this.$message({
+          type: 'info',
+          message: '已取消删除'
+        });          
+      });
     }
   }
 }
@@ -275,5 +301,28 @@ export default {
 
 .list-wrapper {
   margin: 0 30px;
+
+  .author-item {
+    margin-right: 4px;
+
+    &:not(:last-child)::after {
+      content: ',';
+    }
+  }
+}
+
+
+.demo-table-expand {
+  font-size: 0;
+
+  label {
+    width: 90px;
+  }
+
+  .el-form-item {
+    margin-right: 0;
+    margin-bottom: 0;
+    width: 50%;
+  }
 }
 </style>
