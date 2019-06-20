@@ -52,8 +52,8 @@
         ></el-input>
       </el-form-item>
       <el-form-item v-if="isSubmit">
-        <el-button type="primary" @click="submitForm('form')">保 存</el-button>
         <el-button @click="resetForm('form')">重 置</el-button>
+        <el-button type="primary" @click="submitForm('form')">保 存</el-button>
       </el-form-item>
     </el-form>
   </div>
@@ -74,7 +74,7 @@ export default {
 
     authorInfo: {
       type: Object,
-      defualt: () => {}
+      default: () => {}
     },
 
     id: {

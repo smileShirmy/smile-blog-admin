@@ -1,6 +1,6 @@
 import Utils from "@/services/utils/util";
 import article from './article'
-import tag from './tag'
+import category from './category'
 import author from './author'
 
 /**
@@ -23,7 +23,7 @@ let homeRouter = [
     route: '/about',
     filePath: 'views/about/about.vue',
     inNav: true,
-    icon: 'el-icon-info',
+    icon: 'el-icon-sunrise-1',
     order: 0,
   },
   {
@@ -37,7 +37,7 @@ let homeRouter = [
   },
   article,
   author,
-  tag,
+  category,
   {
     title: '留言管理',
     type: 'view',

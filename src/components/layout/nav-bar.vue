@@ -2,7 +2,7 @@
   <div class="navbar-container">
     <screenfull></screenfull>
     <div class="user-info">
-      <span class="say-hi">西麦</span>
+      <span class="say-hi">smile</span>
       <i class="avatar-icon"></i>
     </div>
   </div>

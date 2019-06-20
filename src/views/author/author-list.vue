@@ -3,7 +3,7 @@
     <div class="view-title">作者列表</div>
     <div class="wrapper">
       <el-card>
-        <el-table :data="userData" width="100%">
+        <el-table :data="userData">
           <el-table-column prop="name" label="作者名"></el-table-column>
           <el-table-column label="操作" width="175">
             <template slot-scope="scope">
