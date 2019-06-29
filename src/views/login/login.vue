@@ -1,12 +1,12 @@
 <template>
   <div class="login">
-    <el-card>
+    <el-card v-loading="loading" element-loading-background="rgba(0, 0, 0, 0)">
       <header class="logo">
         blog admin
       </header>
       <form class="form-box" @submit.prevent="throttleLogin">
         <div class="form-item">
-          <input type="text" v-model="form.username" autocomplete="off" placeholder="用户名">
+          <input type="text" v-model="form.authorname" autocomplete="off" placeholder="用户名">
         </div>
         <div class="form-item">
           <input type="password" v-model="form.password" autocomplete="off" placeholder="密码">
@@ -19,25 +19,35 @@
 
 <script>
 import Utils from '@/services/utils/util'
+import Author from '@/services/models/author'
 
 export default {
   name: 'login',
 
   data() {
     return {
+      loading: false,
       wait: 2000,
       throttleLogin: null,
       form: {
-        username: '',
+        authorname: '',
         password: '',
       }
     }
   },
 
   methods: {
-    login() {
-      this.$router.push('/about')
-      this.$message.success('登录成功')
+    async login() {
+      const { authorname, password } = this.form
+      try {
+        this.loading = true
+        await Author.getToken( authorname, password )
+        this.loading = false
+        this.$router.push('/about')
+        this.$message.success('登录成功')
+      } catch (error) {
+        this.loading = false
+      }
     }
   },
 
