@@ -5,8 +5,16 @@ export default {
     state.refreshOptions = option
   },
 
-  [types.REMOVE_LOGINED](state) {
-    state.logined = false
+  [types.REMOVE_LOGIN](state) {
+    state.login = false
     state.user = null
   },
+
+  [types.SET_LOGIN](state) {
+    state.login = true
+  },
+
+  [types.SET_AUTHOR](state, payload) {
+    state.author = payload
+  }
 }

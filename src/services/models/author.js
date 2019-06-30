@@ -1,5 +1,6 @@
 import {
-  post
+  post,
+  get
 } from '@/services/plugins/axios'
 import { saveTokens } from '../utils/cookie'
 
@@ -11,5 +12,10 @@ export default class Author {
     })
     saveTokens(tokens.accessToken, tokens.refreshToken)
     return tokens
+  }
+
+  static async getAuthorInfo() {
+    const info = await get('v1/author/info')
+    console.log(info)
   }
 }

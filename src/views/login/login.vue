@@ -20,6 +20,7 @@
 <script>
 import Utils from '@/services/utils/util'
 import Author from '@/services/models/author'
+import { mapActions } from 'vuex'
 
 export default {
   name: 'login',
@@ -30,8 +31,8 @@ export default {
       wait: 2000,
       throttleLogin: null,
       form: {
-        authorname: '',
-        password: '',
+        authorname: 'name1',
+        password: 'abc123456',
       }
     }
   },
@@ -42,13 +43,26 @@ export default {
       try {
         this.loading = true
         await Author.getToken( authorname, password )
+        await this.getAuthorInfo()
         this.loading = false
         this.$router.push('/about')
         this.$message.success('登录成功')
-      } catch (error) {
+      } catch (e) {
         this.loading = false
+        console.log(e)
       }
-    }
+    },
+
+    async getAuthorInfo() {
+      try {
+        const author = await Author.getAuthorInfo()
+        this.setAuthorAndState(author)
+      } catch (e) {
+        console.log(e) 
+      }
+    },
+
+    ...mapActions(['setAuthorAndState'])
   },
 
   created() {

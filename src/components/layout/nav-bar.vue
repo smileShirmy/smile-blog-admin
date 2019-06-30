@@ -3,17 +3,19 @@
     <screenfull></screenfull>
     <div class="user-info">
       <span class="say-hi">smile</span>
-      <i class="avatar-icon"></i>
+      <author></author>
     </div>
   </div>
 </template>
 
 <script>
 import Screenfull from '@/components/base/screenfull'
+import Author from '@/components/layout/author'
 
 export default {
   components: {
-    Screenfull
+    Screenfull,
+    Author
   }
 }
 </script>
@@ -35,15 +37,6 @@ export default {
 
   .say-hi {
     margin-right: 20px;
-  }
-
-  .avatar-icon {
-    display: inline-block;
-    width: 40px;
-    height: 40px;
-    margin-right: 10px;
-    border-radius: 50%;
-    background: #eee;
   }
 }
 </style>
