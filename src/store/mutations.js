@@ -7,7 +7,7 @@ export default {
 
   [types.REMOVE_LOGIN](state) {
     state.login = false
-    state.user = null
+    state.author = null
   },
 
   [types.SET_LOGIN](state) {

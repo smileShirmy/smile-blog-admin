@@ -18,7 +18,6 @@ const _axios = axios.create(config)
 
 _axios.interceptors.request.use(originConfig => {
   const reqConfig = { ...originConfig }
-  console.log(reqConfig)
 
   // step1: 容错处理
   if (!reqConfig.url) {

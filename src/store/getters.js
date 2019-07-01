@@ -31,6 +31,8 @@ export const getStageByRoute = () => {
 
 export const stageList = () => stageMap
 
+export const author = state => state.author
+
 export const sideBarList = (state) => {
   const { sideBarLevel, stageConfig } = state
 

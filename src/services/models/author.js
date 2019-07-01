@@ -15,7 +15,6 @@ export default class Author {
   }
 
   static async getAuthorInfo() {
-    const info = await get('v1/author/info')
-    console.log(info)
+    return await get('v1/author/info')
   }
 }

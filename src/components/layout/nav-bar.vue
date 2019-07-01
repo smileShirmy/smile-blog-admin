@@ -2,7 +2,7 @@
   <div class="navbar-container">
     <screenfull></screenfull>
     <div class="user-info">
-      <span class="say-hi">smile</span>
+      <span class="say-hi">{{author.name}}</span>
       <author></author>
     </div>
   </div>
@@ -11,11 +11,16 @@
 <script>
 import Screenfull from '@/components/base/screenfull'
 import Author from '@/components/layout/author'
+import { mapGetters } from 'vuex'
 
 export default {
   components: {
     Screenfull,
     Author
+  },
+
+  computed: {
+    ...mapGetters(['author'])
   }
 }
 </script>
