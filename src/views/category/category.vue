@@ -98,7 +98,6 @@ export default {
     },
 
     editCategory(val) {
-      console.log(val)
       this.id = val.id
       this.form.name = val.name
       this.form.cover = val.cover

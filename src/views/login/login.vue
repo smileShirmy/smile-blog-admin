@@ -31,7 +31,7 @@ export default {
       wait: 2000,
       throttleLogin: null,
       form: {
-        authorname: 'name1',
+        authorname: 'shirmy',
         password: 'abc123456',
       }
     }
