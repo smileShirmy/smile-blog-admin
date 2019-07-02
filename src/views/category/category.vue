@@ -61,8 +61,6 @@ export default {
     CategoryInfo
   },
 
-  inject: ['eventBus'],
-
   data() {
     return {
       loading: false,
@@ -117,23 +115,17 @@ export default {
           if (res.errorCode === 0) {
             this.loading = false
             await this.getCategories()
-            this.$message({
-              type: 'success',
-              message: res.msg
-            });
+            this.$message.success(`${res.msg}`)
           } else {
             this.loading = false
-            this.$message.error(res.msg)
+            this.$message.error(`${res.msg}`)
           }
         } catch (e) {
           this.loading = false
           console.log(e)
         }
       }).catch(() => {
-        this.$message({
-          type: 'info',
-          message: '已取消删除'
-        })
+        this.$message.info('已取消删除')
       })
     },
 

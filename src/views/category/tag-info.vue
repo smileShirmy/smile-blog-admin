@@ -21,6 +21,8 @@
 </template>
 
 <script>
+import tag from '@/services/models/tag'
+
 export default {
   props: {
     isSubmit: {
@@ -66,15 +68,52 @@ export default {
 
   methods: {
     submitForm(formName) {
-      this.$refs[formName].validate((valid) => {
+      this.$refs[formName].validate(async (valid) => {
         if (valid) {
-          const msg = '添加标签成功'
-          this.$message.success(`${msg}`)
+          if (this.infoType === 'add') {
+            // 新增标签
+            try {
+              this.loading = true
+              const res = await tag.createTag(this.form)
+              if (res.errorCode === 0) {
+                this.loading = false
+                this.$message.success(`${res.msg}`)
+                this.$emit('createTag', true)
+                this.resetForm(formName)
+              } else {
+                this.loading = false
+                this.$message.error(`${res.msg}`)
+              }
+            } catch (e) {
+              this.loading = false
+              console.log(e)
+            }
+          } else {
+            // 更新标签
+            if (this.form.name === this.info.name) {
+              this.$emit('handleInfoResult', false)
+              return
+            }
+            try {
+              this.loading = true
+              const res = await tag.updateTag(this.id, this.form)
+              if (res.errorCode === 0) {
+                this.loading = false
+                this.$message.success(`${res.msg}`)
+                this.$emit('handleInfoResult', true)
+              } else {
+                this.loading = false
+                this.$message.error(`${res.msg}`)
+              }
+            } catch (e) {
+              this.loading = false
+              console.log(e)
+            }
+          }
         } else {
           this.$message.error('请填写正确的信息')
         }
       })
-      this.resetForm(formName);
     },
 
     resetForm(formName) {

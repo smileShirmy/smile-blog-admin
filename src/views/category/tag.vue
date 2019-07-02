@@ -4,14 +4,14 @@
     <el-card class="wrapper">
       <el-tabs v-model="activeName" @tab-click="handleClick">
         <el-tab-pane label="标签列表" name="tagList">
-          <el-table :data="tags" width="100%">
+          <el-table :data="tags" width="100%" v-loading="loading">
             <el-table-column prop="name" label="名称"></el-table-column>
             <el-table-column label="操作" fixed="right" width="175">
             <template slot-scope="scope">
-              <el-button type="primary" size="mini" @click="editCategory(scope.row)"
+              <el-button type="primary" size="mini" @click="editTag(scope.row)"
                 >编辑</el-button
               >
-              <el-button type="danger" size="mini" @click="deleteCategory(scope.row)"
+              <el-button type="danger" size="mini" @click="deleteTag(scope.row)"
                 >删除</el-button
               >
             </template>
@@ -19,14 +19,14 @@
           </el-table>
         </el-tab-pane>
         <el-tab-pane label="新增标签" name="tagAdd">
-          <tag-info></tag-info>
+          <tag-info @createTag="onCreateTag"></tag-info>
         </el-tab-pane>
       </el-tabs>
     </el-card>
     <!-- 编辑分类 -->
     <el-dialog append-to-body :visible.sync="dialogVisible" :before-close="handleClose">
       <div class="dialog-body">
-        <tag-info ref="info" :isSubmit="false" :infoType="'edit'" :info="form" :id="id"></tag-info>
+        <tag-info v-if="dialogVisible" ref="info" :isSubmit="false" :infoType="'edit'" :info="form" :id="id" @handleInfoResult="onHandleInfoResult"></tag-info>
       </div>
       <span slot="footer" class="dialog-footer">
         <el-button @click="resetForm">重 置</el-button>
@@ -38,6 +38,7 @@
 
 <script>
 import tagInfo from './tag-info';
+import tag from '@/services/models/tag'
 
 export default {
   components: {
@@ -46,19 +47,11 @@ export default {
 
   data() {
     return {
+      loading: false,
       id: 0,
       dialogVisible: false,
       activeName: 'tagList',
-      tags: [
-        {
-          id: 1,
-          name: 'smile',
-        },
-        {
-          id: 2,
-          name: 'shirmy',
-        }
-      ],
+      tags: [],
       form: {
         name: '',
       }
@@ -70,29 +63,50 @@ export default {
 
     },
 
-    editCategory(val) {
+    // 监听添加标签是否成功
+    onCreateTag(flag) {
+      if (flag === true) {
+        this.getTags()
+      }
+    },
+
+    onHandleInfoResult(flag) {
+      this.dialogVisible = false
+      if (flag === true) {
+        this.getTags()
+      }
+    },
+
+    editTag(val) {
       this.id = val.id
       this.form.name = val.name
-      this.form.desc = val.desc
       this.dialogVisible = true
     },
     
-    edeleteCategory() {
-      this.$confirm('此操作将永久删除分类, 是否继续?', '提示', {
+    deleteTag(val) {
+      this.$confirm('此操作将永久删除标签, 是否继续?', '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning'
-      }).then(() => {
-        this.$message({
-          type: 'success',
-          message: '删除成功!'
-        });
+      }).then(async () => {
+        try {
+          this.loading = true
+          const res = await tag.deleteTag(val.id)
+          if (res.errorCode === 0) {
+            this.loading = false
+            await this.getTags()
+            this.$message.success(`${res.msg}`)
+          } else {
+            this.loading = false
+            this.$message.error(res.msg)
+          }
+        } catch (e) {
+          this.loading = false
+          console.log(e)
+        }
       }).catch(() => {
-        this.$message({
-          type: 'info',
-          message: '已取消删除'
-        });          
-      });
+        this.$message.info('已取消删除')
+      })
     },
 
     handleClose() {
@@ -105,7 +119,23 @@ export default {
 
     resetForm() {
       this.$refs.info.resetForm('form')
+    },
+
+    // 刷新/获取标签
+    async getTags() {
+      try {
+        this.loading = true
+        this.tags = await tag.getTags()
+        this.loading = false
+      } catch (e) {
+        this.loading = false
+        console.log(e)
+      }
     }
+  },
+
+  async created() {
+    await this.getTags()
   }
 }
 </script>

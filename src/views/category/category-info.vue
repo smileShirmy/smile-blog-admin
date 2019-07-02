@@ -64,8 +64,6 @@ export default {
     }
   },
 
-  inject: ['eventBus'],
-
   data() {
     const checkName = (rule, value, callback) => {
       if (value === '') {
