@@ -42,18 +42,18 @@ const router = new Router({
   })
 })
 
-router.beforeEach((to, from, next) => {
+// router.beforeEach((to, from, next) => {
 
-  if (isLoginRequired(to.name) && !store.state.login) {
-    next({ path: '/login' })
-    return
-  }
+//   if (isLoginRequired(to.name) && !store.state.login) {
+//     next({ path: '/login' })
+//     return
+//   }
 
-  if (to.meta.title) {
-    document.title = to.meta.title
-  }
+//   if (to.meta.title) {
+//     document.title = to.meta.title
+//   }
 
-  next()
-})
+//   next()
+// })
 
 export default router

@@ -108,13 +108,14 @@ _axios.interceptors.response.use(async (res) => {
     }
 
     // 如果是令牌无效或者是refreshToken 相关异常
-    if (errorCode === 10000 || errorCode === 10100) {
-      setTimeout(() => {
-        store.dispatch('loginOut')
-        const { origin } = window.location
-        window.location.href = origin
-      }, 1500)
-    }
+    // TODO: 逻辑优化，明确状态码
+    // if (errorCode === 10000 || errorCode === 10100) {
+    //   setTimeout(() => {
+    //     store.dispatch('loginOut')
+    //     const { origin } = window.location
+    //     window.location.href = origin
+    //   }, 1500)
+    // }
 
     // TODO: 令牌相关，刷新令牌
 

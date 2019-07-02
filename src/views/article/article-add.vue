@@ -26,7 +26,7 @@
             </el-form-item>
             <el-form-item label="作者">
               <el-select
-                v-model="form.author"
+                v-model="form.authors"
                 multiple
                 filterable
                 allow-create
@@ -34,18 +34,53 @@
                 placeholder="请选择作者"
               >
                 <el-option
-                  v-for="item in authors"
-                  :key="item.id"
-                  :label="item.label"
-                  :value="item.id">
+                  v-for="author in authors"
+                  :key="author.id"
+                  :label="author.name"
+                  :value="author.id"
+                >
+                </el-option>
+              </el-select>
+            </el-form-item>
+            <el-form-item label="分类">
+              <el-select
+                v-model="form.categoryId"
+                size="medium"
+                placeholder="请选择分类"
+              >
+                <el-option
+                  v-for="category in categories"
+                  :key="category.id"
+                  :value="category.id"
+                  :label="category.name"
+                >
+                </el-option>
+              </el-select>
+            </el-form-item>
+            <el-form-item label="标签">
+              <el-select
+                v-model="form.tags"
+                multiple
+                filterable
+                allow-create
+                size="medium"
+                placeholder="请选择标签"
+              >
+                <el-option
+                  v-for="tag in tags"
+                  :key="tag.id"
+                  :label="tag.name"
+                  :value="tag.id"
+                >
                 </el-option>
               </el-select>
             </el-form-item>
             <el-form-item label="时间">
               <el-date-picker
-                v-model="form.pubTime"
+                v-model="form.createdDate"
                 size="medium"
                 type="datetime"
+                :editable="false"
               ></el-date-picker>
             </el-form-item>
             <el-form-item label="内容">
@@ -57,7 +92,9 @@
               ></el-input>
             </el-form-item>
             <el-form-item>
-              <el-button type="primary" @click="submitForm('form')">保 存</el-button>
+              <el-button type="primary" @click.stop="submitForm('form')"
+                >保 存</el-button
+              >
               <el-button type="primary" @click="preview">预 览</el-button>
             </el-form-item>
           </el-form>
@@ -68,30 +105,36 @@
 </template>
 
 <script>
+import category from '@/services/models/category'
+import tag from '@/services/models/tag'
+import author from '@/services/models/author'
+import article from '@/services/models/article'
+
 export default {
   data() {
     return {
       form: {
         title: '',
-        author: '',
-        pubTime: '',
+        authors: '',
+        createdDate: '',
         cover: '',
-        content: ''
+        content: '',
+        categoryId: '',
+        tags: '',
       },
-      authors: [{
-        id: 1,
-        value: 'smile',
-        label: 'smile'
-      }, {
-        id: 2,
-        value: 'shirmy',
-        label: 'shirmy'
-      }],
+      authors: [],
+      categories: [],
+      tags: [],
     };
   },
 
   methods: {
-    submitForm(formName) {
+    async submitForm(formName) {
+      try {
+        await article.createArticle(this.form)
+      } catch (e) {
+        console.log(e)
+      }
       this.resetForm(formName);
     },
 
@@ -101,7 +144,25 @@ export default {
 
     preview() {
       
+    },
+
+    async getCategories() {
+      this.categories = await category.getCategories()
+    },
+
+    async getTags() {
+      this.tags = await tag.getTags()
+    },
+
+    async getAuthors() {
+      this.authors = await author.getAuthors()
     }
+  },
+
+  created() {
+    this.getCategories()
+    this.getTags()
+    this.getAuthors()
   }
 };
 </script>
