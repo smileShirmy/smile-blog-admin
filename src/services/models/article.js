@@ -4,7 +4,6 @@ import {
 
 class Article {
   async createArticle(article) {
-    console.log(article)
     const res = await post('v1/article', article)
     return res
   }

@@ -108,7 +108,6 @@ _axios.interceptors.response.use(async (res) => {
     }
 
     // 如果是令牌无效或者是refreshToken 相关异常
-    // TODO: 逻辑优化，明确状态码
     // if (errorCode === 10000 || errorCode === 10100) {
     //   setTimeout(() => {
     //     store.dispatch('loginOut')
@@ -116,6 +115,12 @@ _axios.interceptors.response.use(async (res) => {
     //     window.location.href = origin
     //   }, 1500)
     // }
+    console.log('errorCode:', errorCode)
+
+    Vue.prototype.$message({
+      message: msg || '未知的errorCode',
+      type: 'error',
+    })
 
     // TODO: 令牌相关，刷新令牌
 

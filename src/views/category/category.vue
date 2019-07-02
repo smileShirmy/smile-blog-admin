@@ -4,7 +4,7 @@
     <el-card class="wrapper">
       <el-tabs v-model="activeName" @tab-click="handleClick">
         <el-tab-pane label="分类列表" name="categoryList">
-          <el-table :data="categories" width="100%">
+          <el-table :data="categories" width="100%" v-loading="loading">
             <el-table-column type="expand">
               <template slot-scope="props">
                 <el-form
@@ -13,7 +13,10 @@
                   class="demo-table-expand"
                 >
                   <el-form-item label="描述">
-                    <span>{{ props.row.desc }}</span>
+                    <span>{{ props.row.description }}</span>
+                  </el-form-item>
+                  <el-form-item label="封面">
+                    <img class="cover" :src="props.row.cover">
                   </el-form-item>
                 </el-form>
               </template>
@@ -32,14 +35,14 @@
           </el-table>
         </el-tab-pane>
         <el-tab-pane label="新增分类" name="categoryAdd">
-          <category-info></category-info>
+          <category-info @createCategory="onCreateCategory"></category-info>
         </el-tab-pane>
       </el-tabs>
     </el-card>
     <!-- 编辑分类 -->
     <el-dialog append-to-body :visible.sync="dialogVisible" :before-close="handleClose">
       <div class="dialog-body">
-        <category-info ref="info" :isSubmit="false" :infoType="'edit'" :info="form" :id="id"></category-info>
+        <category-info v-if="dialogVisible" ref="info" :isSubmit="false" :infoType="'edit'" :info="form" :id="id" @handleInfoResult="onHandleInfoResult"></category-info>
       </div>
       <span slot="footer" class="dialog-footer">
         <el-button @click="resetForm">重 置</el-button>
@@ -51,32 +54,26 @@
 
 <script>
 import CategoryInfo from './category-info';
+import category from '@/services/models/category'
 
 export default {
   components: {
     CategoryInfo
   },
 
+  inject: ['eventBus'],
+
   data() {
     return {
+      loading: false,
       id: 0,
       dialogVisible: false,
       activeName: 'categoryList',
-      categories: [
-        {
-          id: 1,
-          name: 'smile',
-          desc: 'smile desc'
-        },
-        {
-          id: 2,
-          name: 'shirmy',
-          desc: 'shirmy desc'
-        }
-      ],
+      categories: [],
       form: {
         name: '',
-        desc: '',
+        cover: '',
+        description: '',
       }
     }
   },
@@ -86,29 +83,60 @@ export default {
 
     },
 
+    // 监听添加分类是否成功
+    onCreateCategory(flag) {
+      if (flag === true) {
+        this.getCategories()
+      }
+    },
+
+    onHandleInfoResult(flag) {
+      this.dialogVisible = false
+      if (flag === true) {
+        this.getCategories()
+      }
+    },
+
     editCategory(val) {
+      console.log(val)
       this.id = val.id
       this.form.name = val.name
-      this.form.desc = val.desc
+      this.form.cover = val.cover
+      this.form.description = val.description
       this.dialogVisible = true
     },
     
-    edeleteCategory() {
+    deleteCategory(val) {
+      let res
       this.$confirm('此操作将永久删除分类, 是否继续?', '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning'
-      }).then(() => {
-        this.$message({
-          type: 'success',
-          message: '删除成功!'
-        });
+      }).then(async () => {
+        try {
+          this.loading = true
+          res = await category.deleteCategory(val.id)
+        } catch (e) {
+          this.loading = false
+          console.log(e)
+        }
+        if (res.errorCode === 0) {
+          this.loading = false
+          await this.getCategories()
+          this.$message({
+            type: 'success',
+            message: res.msg
+          });
+        } else {
+          this.loading = false
+          this.$message.error(res.msg)
+        }
       }).catch(() => {
         this.$message({
           type: 'info',
           message: '已取消删除'
-        });          
-      });
+        })
+      })
     },
 
     handleClose() {
@@ -121,7 +149,23 @@ export default {
 
     resetForm() {
       this.$refs.info.resetForm('form')
+    },
+
+    // 刷新/获取分类
+    async getCategories() {
+      try {
+        this.loading = true
+        this.categories = await category.getCategories()
+        this.loading = false
+      } catch (e) {
+        this.loading = false
+        console.log(e)
+      }
     }
+  },
+
+  async created() {
+    await this.getCategories()
   }
 }
 </script>
@@ -149,5 +193,10 @@ export default {
     margin-bottom: 0;
     width: 50%;
   }
+}
+
+.cover {
+  max-width: 150px;
+  max-height: 150px;
 }
 </style>

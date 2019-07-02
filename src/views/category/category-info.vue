@@ -10,13 +10,20 @@
       :rules="rules"
     >
       <el-form-item label="名称" prop="name">
-        <el-input size="medium" clearable v-model="form.name"></el-input>
+        <el-input size="medium" clearable v-model="form.name" placeholder="请输入分类名称"></el-input>
       </el-form-item>
-      <el-form-item label="描述" prop="desc">
+      <el-form-item label="封面" prop="cover">
+        <el-input
+          v-model="form.cover"
+          size="medium"
+          placeholder="请输入封面地址"
+        ></el-input>
+      </el-form-item>
+      <el-form-item label="描述" prop="description">
         <el-input
           type="textarea"
           size="medium"
-          v-model="form.desc"
+          v-model="form.description"
           :autosize="{ minRows: 6, maxRows: 8 }"
           auto-complete="off"
           maxlength="140"
@@ -32,6 +39,8 @@
 </template>
 
 <script>
+import category from '@/services/models/category'
+
 export default {
   props: {
     isSubmit: {
@@ -55,6 +64,8 @@ export default {
     }
   },
 
+  inject: ['eventBus'],
+
   data() {
     const checkName = (rule, value, callback) => {
       if (value === '') {
@@ -62,7 +73,13 @@ export default {
       }
       callback()
     }
-    const checkDesc = (rule, value, callback) => {
+    const checkCover = (rule, value, callback) => {
+      if (value === '') {
+        callback(new Error('请填写封面路径'))
+      }
+      callback()
+    }
+    const checkDescription = (rule, value, callback) => {
       if (value === '') {
         callback(new Error('请填写描述信息'))
       }
@@ -72,14 +89,18 @@ export default {
       loading: false,
       form: {
         name: '',
-        desc: ''
+        cover: '',
+        description: '',
       },
       rules: {
         name: [
           { validator: checkName, trigger: 'blur', required: true },
         ],
-        desc: [
-          { validator: checkDesc, trigger: 'blur', required: true },
+        cover: [
+          { validator: checkCover, trigger: 'blur', required: true},
+        ],
+        description: [
+          { validator: checkDescription, trigger: 'blur', required: true },
         ]
       }
     }
@@ -87,15 +108,52 @@ export default {
 
   methods: {
     submitForm(formName) {
-      this.$refs[formName].validate((valid) => {
+      this.$refs[formName].validate(async (valid) => {
         if (valid) {
-          const msg = '添加分类成功'
-          this.$message.success(`${msg}`)
+          if (this.infoType === 'add') {
+            // 新增分类
+            try {
+              this.loading = true
+              const res = await category.createCategory(this.form)
+              if (res.errorCode === 0) {
+                this.loading = false
+                this.$message.success(`${res.msg}`)
+                this.$emit('createCategory', true)
+                this.resetForm(formName);
+              } else {
+                this.loading = false
+                this.$message.error(`${res.msg}`)
+              }
+            } catch (e) {
+              this.loading = false
+              console.log(e)
+            }
+          } else {
+            // 更新分类
+            if (this.form.name === this.info.name && this.form.cover === this.info.cover && this.form.description === this.info.description) {
+              this.$emit('handleInfoResult', false)
+              return
+            }
+            try {
+              this.loading = true
+              const res = await category.updateCategory(this.id, this.form)
+              if (res.errorCode === 0) {
+                this.loading = false
+                this.$message.success(`${res.msg}`)
+                this.$emit('handleInfoResult', true)
+              } else {
+                this.loading = false
+                this.$message.error(`${res.msg}`)
+              }
+            } catch (e) {
+              this.loading = false
+              console.log(e)
+            }
+          }
         } else {
           this.$message.error('请填写正确的信息')
         }
       })
-      this.resetForm(formName);
     },
 
     resetForm(formName) {
@@ -108,7 +166,8 @@ export default {
 
     setInfo() {
       this.form.name = this.info.name
-      this.form.desc = this.info.desc
+      this.form.cover = this.info.cover
+      this.form.description = this.info.description
     }
   },
 

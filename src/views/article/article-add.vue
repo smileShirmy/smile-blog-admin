@@ -131,11 +131,14 @@ export default {
   methods: {
     async submitForm(formName) {
       try {
-        await article.createArticle(this.form)
+        const res = await article.createArticle(this.form)
+        if (res.errorCode === 0) {
+          this.$message.success(`${res.msg}`)
+          this.resetForm(formName);
+        }
       } catch (e) {
         console.log(e)
       }
-      this.resetForm(formName);
     },
 
     resetForm(formName) {
