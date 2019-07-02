@@ -135,6 +135,8 @@ export default {
         if (res.errorCode === 0) {
           this.$message.success(`${res.msg}`)
           this.resetForm(formName);
+        } else {
+          this.$message.error(res.msg)
         }
       } catch (e) {
         console.log(e)
@@ -150,15 +152,27 @@ export default {
     },
 
     async getCategories() {
-      this.categories = await category.getCategories()
+      try {
+        this.categories = await category.getCategories()
+      } catch (e) {
+        console.log(e)
+      }
     },
 
     async getTags() {
-      this.tags = await tag.getTags()
+      try {
+        this.tags = await tag.getTags()
+      } catch (e) {
+        console.log(e)
+      }
     },
 
     async getAuthors() {
-      this.authors = await author.getAuthors()
+      try {
+        this.authors = await author.getAuthors()
+      } catch (e) {
+        console.log(e)
+      }
     }
   },
 

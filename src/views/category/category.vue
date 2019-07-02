@@ -107,7 +107,6 @@ export default {
     },
     
     deleteCategory(val) {
-      let res
       this.$confirm('此操作将永久删除分类, 是否继续?', '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
@@ -115,21 +114,21 @@ export default {
       }).then(async () => {
         try {
           this.loading = true
-          res = await category.deleteCategory(val.id)
+          const res = await category.deleteCategory(val.id)
+          if (res.errorCode === 0) {
+            this.loading = false
+            await this.getCategories()
+            this.$message({
+              type: 'success',
+              message: res.msg
+            });
+          } else {
+            this.loading = false
+            this.$message.error(res.msg)
+          }
         } catch (e) {
           this.loading = false
           console.log(e)
-        }
-        if (res.errorCode === 0) {
-          this.loading = false
-          await this.getCategories()
-          this.$message({
-            type: 'success',
-            message: res.msg
-          });
-        } else {
-          this.loading = false
-          this.$message.error(res.msg)
         }
       }).catch(() => {
         this.$message({
