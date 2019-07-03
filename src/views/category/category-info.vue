@@ -71,12 +71,6 @@ export default {
       }
       callback()
     }
-    const checkCover = (rule, value, callback) => {
-      if (value === '') {
-        callback(new Error('请填写封面路径'))
-      }
-      callback()
-    }
     const checkDescription = (rule, value, callback) => {
       if (value === '') {
         callback(new Error('请填写描述信息'))
@@ -95,7 +89,12 @@ export default {
           { validator: checkName, trigger: 'blur', required: true },
         ],
         cover: [
-          { validator: checkCover, trigger: 'blur', required: true},
+          {
+            type: 'url',
+            message: '请输入正确的头像地址',
+            trigger: 'blur',
+            required: true
+          }
         ],
         description: [
           { validator: checkDescription, trigger: 'blur', required: true },

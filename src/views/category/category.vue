@@ -2,7 +2,7 @@
   <div class="container">
     <div class="view-title">分类管理</div>
     <el-card class="wrapper">
-      <el-tabs v-model="activeName" @tab-click="handleClick">
+      <el-tabs v-model="activeTab" @tab-click="handleClick">
         <el-tab-pane label="分类列表" name="categoryList">
           <el-table :data="categories" width="100%" v-loading="loading">
             <el-table-column type="expand">
@@ -66,7 +66,7 @@ export default {
       loading: false,
       id: 0,
       dialogVisible: false,
-      activeName: 'categoryList',
+      activeTab: 'categoryList',
       categories: [],
       form: {
         name: '',

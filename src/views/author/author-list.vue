@@ -3,7 +3,7 @@
     <div class="view-title">作者列表</div>
     <div class="wrapper">
       <el-card>
-        <el-table :data="userData">
+        <el-table :data="authors">
           <el-table-column prop="name" label="作者名"></el-table-column>
           <el-table-column label="操作" width="175">
             <template slot-scope="scope">
@@ -24,10 +24,10 @@
       :visible.sync="dialogVisible"
       :before-close="handleClose"
     >
-      <div class="dialog-body">
-        <el-tabs v-model="activeName" @tab-click="handleClick">
-          <el-tab-pane label="修改信息" name="authorInfo">
-            <author-info ref="authorInfo" :isSubmit="false" :infoType="'edit'" :authorInfo="form" :id="id"></author-info>
+      <div class="dialog-body" v-if="dialogVisible">
+        <el-tabs v-model="activeTab" @tab-click="handleClick">
+          <el-tab-pane label="修改信息" name="info">
+            <author-info ref="info" :isSubmit="false" :infoType="'edit'" :info="form" :id="id" @handleInfoResult="onHandleInfoResult"></author-info>
           </el-tab-pane>
           <el-tab-pane label="修改密码" name="authorPassword">
             <author-password ref="password" :id="id"></author-password>
@@ -45,6 +45,7 @@
 <script>
 import AuthorInfo from './author-info'
 import AuthorPassword from './author-password'
+import author from '@/services/models/author'
 
 export default {
   components: {
@@ -55,42 +56,33 @@ export default {
   data() {
     return {
       id: 0,
-      activeName: 'authorInfo',
+      activeTab: 'info',
       dialogVisible: false,
-      userData: [
-        {
-          id: 1,
-          name: 'smile',
-          email: '1@qq.com',
-          password: '123456',
-          confirmPassword: '123456',
-          desc: 'smile desc'
-        },
-        {
-          id: 2,
-          name: 'shirmy',
-          email: '2@qq.com',
-          password: '123456',
-          confirmPassword: '123456',
-          desc: 'shirmy desc'
-        }
-      ],
+      authors: [],
       form: {
         name: '',
+        avatar: '',
         email: '',
         password: '',
         confirmPassword: '',
-        desc: ''
       },
     }
   },
   
   methods: {
+    onHandleInfoResult(flag) {
+      if (flag === true) {
+        this.dialogVisible = false
+        this.getAuthors()
+      }
+    },
+
     editAuthor(val) {
       this.id = val.id
       this.form.name = val.name
+      this.form.avatar = val.avatar
       this.form.email = val.email
-      this.form.desc = val.desc
+      this.form.description = val.description
       this.dialogVisible = true
     },
 
@@ -116,17 +108,18 @@ export default {
       this.dialogVisible = false
     },
 
+    // TODO: 这里
     confirmEdit() {
-      if (this.activeTab === 'authorInfo') {
-        this.$refs.authorInfo.submitForm('form')
+      if (this.activeTab === 'info') {
+        this.$refs.info.submitForm('form')
       } else {
         this.$refs.password.submitForm('form')
       }
     },
 
     resetForm() {
-      if (this.activeName === 'authorInfo') {
-        this.$refs.authorInfo.resetForm('form')
+      if (this.activeTab === 'info') {
+        this.$refs.info.resetForm('form')
       } else {
         this.$refs.password.resetForm('form')
       }
@@ -134,7 +127,21 @@ export default {
 
     handleClick() {
 
+    },
+
+    async getAuthors() {
+      try {
+        this.loading = true
+        this.authors = await author.getAuthors()
+        this.loading = false
+      } catch (e) {
+        console.log(e)
+      }
     }
+  },
+
+  async created() {
+    await this.getAuthors()
   }
 }
 </script>

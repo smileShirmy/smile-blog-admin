@@ -2,7 +2,7 @@
   <div class="container">
     <div class="view-title">标签管理</div>
     <el-card class="wrapper">
-      <el-tabs v-model="activeName" @tab-click="handleClick">
+      <el-tabs v-model="activeTab" @tab-click="handleClick">
         <el-tab-pane label="标签列表" name="tagList">
           <el-table :data="tags" width="100%" v-loading="loading">
             <el-table-column prop="name" label="名称"></el-table-column>
@@ -50,7 +50,7 @@ export default {
       loading: false,
       id: 0,
       dialogVisible: false,
-      activeName: 'tagList',
+      activeTab: 'tagList',
       tags: [],
       form: {
         name: '',

@@ -12,6 +12,12 @@
       <el-form-item label="作者名" prop="name">
         <el-input size="medium" clearable v-model="form.name" :disabled="!isEdited"></el-input>
       </el-form-item>
+      <el-form-item label="头像" prop="avatar">
+        <el-input
+          v-model="form.avatar"
+          size="medium"
+        ></el-input>
+      </el-form-item>
       <el-form-item label="邮箱" prop="email">
         <el-input
           size="medium"
@@ -40,10 +46,10 @@
           show-password
         ></el-input>
       </el-form-item>
-      <el-form-item label="作者描述" prop="desc">
+      <el-form-item label="作者描述" prop="description">
         <el-input
           type="textarea"
-          v-model="form.desc"
+          v-model="form.description"
           clearable=""
           :autosize="{ minRows: 6, maxRows: 8 }"
           autocomplete="off"
@@ -60,6 +66,8 @@
 </template>
 
 <script>
+import author from '@/services/models/author'
+
 export default {
   props: {
     isSubmit: {
@@ -72,7 +80,7 @@ export default {
       default: 'add'
     },
 
-    authorInfo: {
+    info: {
       type: Object,
       default: () => {}
     },
@@ -95,6 +103,8 @@ export default {
         callback(new Error('请输入密码'))
       } else if (value.length < 6) {
         callback(new Error('密码长度不能少于6位数'))
+      } else if (!/^(?![0-9]+$)(?![a-zA-Z]+$)[0-9A-Za-z]/.test(value)) {
+        callback(new Error('密码需要由字母和数字组成'))
       } else {
         if (this.form.confirmPassword !== '') {
           this.$refs.form.validateField('confirmPassword')
@@ -111,7 +121,7 @@ export default {
         callback()
       }
     }
-    const checkDesc = (rule, value, callback) => {
+    const checkDescription = (rule, value, callback) => {
       if (value === '') {
         callback(new Error('请填写描述信息'))
       }
@@ -122,16 +132,25 @@ export default {
       loading: false,
       form: {
         name: '',
+        avatar: '',
         email: '',
         password: '',
         confirmPassword: '',
-        desc: ''
+        description: ''
       },
       rules: {
         name: [
           {
             validator: checkName,
             trigger: ['blur', 'change'],
+            required: this.infoType === 'add'
+          }
+        ],
+        avatar: [
+          {
+            type: 'url',
+            message: '请输入正确的头像地址',
+            trigger: 'blur',
             required: true
           }
         ],
@@ -144,13 +163,13 @@ export default {
           },
         ],
         password: [
-          { validator: checkPassword, trigger: 'blur', required: true },
+          { validator: checkPassword, trigger: 'blur', required: this.infoType === 'add' },
         ],
         confirmPassword: [
-          { validator: checkPassword2, trigger: 'blur', required: true },
+          { validator: checkPassword2, trigger: 'blur', required: this.infoType === 'add' },
         ],
-        desc: [
-          { validator: checkDesc, trigger: 'blur', required: true },
+        description: [
+          { validator: checkDescription, trigger: 'blur', required: true },
         ]
       }
     }
@@ -158,15 +177,61 @@ export default {
   
   methods: {
     submitForm(formName) {
-      this.$refs[formName].validate((valid) => {
+      this.$refs[formName].validate(async (valid) => {
         if (valid) {
-          const msg = '添加用户成功'
-          this.$message.success(`${msg}`)
+          if (this.infoType === 'add') {
+            // 新增用户
+            try {
+              this.loading = true
+              const data = {
+                name: this.form.name,
+                avatar: this.form.avatar,
+                email: this.form.email,
+                password: this.form.password,
+                description: this.form.description,
+                auth: 8
+              }
+              const res = await author.createAuthor(data)
+              if (res.errorCode === 0) {
+                this.loading = false
+                this.$message.success(`${res.msg}`)
+                this.resetForm(formName)
+              }
+            } catch(e) {
+              this.loading  = false
+              console.log(e)
+            }
+          } else {
+            // 修改用户信息
+            if (this.form.avatar === this.info.avatar && this.form.email === this.info.email && this.form.description === this.info.description && this.form.auth === this.info.auth) {
+              this.$emit('handleInfoResult', false)
+              return
+            }
+            const data = {
+              avatar: this.form.avatar,
+              email: this.form.email,
+              description: this.form.description,
+              auth: 8
+            }
+            try {
+              const res = await author.updateAuthor(data)
+              if (res.errorCode === 0) {
+                this.loading = false
+                this.$message.success(`${res.msg}`)
+                this.$emit('handleInfoResult', true)
+              } else {
+                this.loading = false
+                this.$message(`${res.msg}`)
+              }
+            } catch (e) {
+              this.loading = false
+              console.log(e)
+            }
+          }
         } else {
           this.$message.error('请填写正确的信息')
         }
       })
-      this.resetForm(formName);
     },
 
     resetForm(formName) {
@@ -178,9 +243,10 @@ export default {
     },
 
     setInfo() {
-      this.form.name = this.authorInfo.name
-      this.form.email = this.authorInfo.email
-      this.form.desc = this.authorInfo.desc
+      this.form.name = this.info.name
+      this.form.avatar = this.info.avatar
+      this.form.email = this.info.email
+      this.form.description = this.info.description
     }
   },
 

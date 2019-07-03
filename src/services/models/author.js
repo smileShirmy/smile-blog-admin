@@ -1,6 +1,7 @@
 import {
   post,
-  get
+  get,
+  put
 } from '@/services/plugins/axios'
 import { saveTokens } from '../utils/cookie'
 
@@ -22,5 +23,17 @@ export default class Author {
   // 获取所有作者
   static async getAuthors() {
     return await get('v1/author/authors')
+  }
+
+  // 创建作者
+  static async createAuthor(author) {
+    let res = await post('v1/author', author)
+    return res
+  }
+
+  // 更新作者信息
+  static async updateAuthor(author) {
+    let res = await put('v1/author/info', author)
+    return res
   }
 }
