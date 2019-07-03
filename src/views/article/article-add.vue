@@ -9,22 +9,25 @@
             ref="form"
             label-width="100px"
             @submit.native.prevent
+            status-icon
+            v-loading="loading"
+            :rules="rules"
           >
-            <el-form-item label="标题">
+            <el-form-item label="标题" prop="title">
               <el-input
                 v-model="form.title"
                 size="medium"
                 placeholder="请输入标题"
               ></el-input>
             </el-form-item>
-            <el-form-item label="封面">
+            <el-form-item label="封面" prop="cover">
               <el-input
                 v-model="form.cover"
                 size="medium"
                 placeholder="请输入封面地址"
               ></el-input>
             </el-form-item>
-            <el-form-item label="作者">
+            <el-form-item label="作者" prop="authors">
               <el-select
                 v-model="form.authors"
                 multiple
@@ -42,9 +45,10 @@
                 </el-option>
               </el-select>
             </el-form-item>
-            <el-form-item label="分类">
+            <el-form-item label="分类" prop="categoryId">
               <el-select
                 v-model="form.categoryId"
+                filterable
                 size="medium"
                 placeholder="请选择分类"
               >
@@ -57,7 +61,7 @@
                 </el-option>
               </el-select>
             </el-form-item>
-            <el-form-item label="标签">
+            <el-form-item label="标签" prop="tags">
               <el-select
                 v-model="form.tags"
                 multiple
@@ -75,7 +79,7 @@
                 </el-option>
               </el-select>
             </el-form-item>
-            <el-form-item label="时间">
+            <el-form-item label="时间" prop="createdDate">
               <el-date-picker
                 v-model="form.createdDate"
                 size="medium"
@@ -83,7 +87,31 @@
                 :editable="false"
               ></el-date-picker>
             </el-form-item>
-            <el-form-item label="内容">
+            <el-form-item label="公开" prop="public">
+              <el-select
+                v-model="form.public"
+                filterable
+                allow-create
+                size="medium"
+                placeholder="请选择是否公开"
+              >
+                <el-option :key="1" :label="'公开'" :value="1"></el-option>
+                <el-option :key="2" :label="'私密'" :value="2"></el-option>
+              </el-select>
+            </el-form-item>
+            <el-form-item label="发布" prop="status">
+              <el-select
+                v-model="form.status"
+                filterable
+                allow-create
+                size="medium"
+                placeholder="请选择是否发布"
+              >
+                <el-option :key="1" :label="'草稿'" :value="1"></el-option>
+                <el-option :key="2" :label="'发布'" :value="2"></el-option>
+              </el-select>
+            </el-form-item>
+            <el-form-item label="内容" prop="content">
               <el-input
                 type="textarea"
                 v-model="form.content"
@@ -111,36 +139,88 @@ import author from '@/services/models/author'
 import article from '@/services/models/article'
 
 export default {
+  props: {
+    infoType: {
+      type: String,
+      default: 'add'
+    }
+  },
+
   data() {
     return {
+      loading: false,
       form: {
         title: '',
-        authors: '',
+        authors: [],
         createdDate: '',
         cover: '',
         content: '',
         categoryId: '',
-        tags: '',
+        tags: [],
+        public: 1,
+        status: 1,
       },
       authors: [],
       categories: [],
       tags: [],
-    };
+      rules: {
+        title: [
+          { trigger: 'blur', message: '请输入标题', required: true }
+        ],
+        authors: [
+          { trigger: 'change', message: '请选择作者', required: true}
+        ],
+        createdDate: [
+          { trigger: 'blur', message: '情选择创建时间', required: true}
+        ],
+        cover: [
+          { type: 'url', trigger: 'blur', message: '请输入正确的封面地址', required: true }
+        ],
+        content: [
+          { trigger: 'blur', message: '请输入文章内容', required: true }
+        ],
+        categoryId: [
+          { trigger: 'change', message: '请选择分类', required: true }
+        ],
+        tags: [
+          { type: 'array', message: '请选择标签', required: true }
+        ],
+        public: [
+          { type: 'number', message: '请选择公开或私密', required: true }
+        ],
+        status: [
+          { type: 'number', message: '请选择发布或草稿', required: true }
+        ]
+      }
+    }
   },
 
   methods: {
     async submitForm(formName) {
-      try {
-        const res = await article.createArticle(this.form)
-        if (res.errorCode === 0) {
-          this.$message.success(`${res.msg}`)
-          this.resetForm(formName);
-        } else {
-          this.$message.error(res.msg)
+      this.$refs[formName].validate(async (valid) => {
+        if (valid) {
+          if (this.infoType === 'add') {
+            // 新增文章
+            try {
+              this.loadingn = true
+              const res = await article.createArticle(this.form)
+              if (res.errorCode === 0) {
+                this.loading = false
+                this.$message.success(`${res.msg}`)
+                this.resetForm(formName);
+              } else {
+                this.loading = false
+                this.$message.error(`${res.msg}`)
+              }
+            } catch (e) {
+              this.loading = false
+              console.log(e)
+            }
+          } else {
+            // 编辑文章
+          }
         }
-      } catch (e) {
-        console.log(e)
-      }
+      })
     },
 
     resetForm(formName) {
