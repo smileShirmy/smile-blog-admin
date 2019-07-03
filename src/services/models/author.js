@@ -1,7 +1,8 @@
 import {
   post,
   get,
-  put
+  put,
+  _delete
 } from '@/services/plugins/axios'
 import { saveTokens } from '../utils/cookie'
 
@@ -25,6 +26,11 @@ export default class Author {
     return await get('v1/author/authors')
   }
 
+  // 获取除了管理员之外的所有作者
+  static async getAdminAuthors() {
+    return await get('v1/author/authors/admin')
+  }
+
   // 创建作者
   static async createAuthor(author) {
     let res = await post('v1/author', author)
@@ -46,6 +52,12 @@ export default class Author {
   // 更换自己的密码
   static async changeSelfPassword(data) {
     let res = await put('v1/author/password/self', data)
+    return res
+  }
+
+  // 删除作者
+  static async deleteAuthor(id) {
+    let res = await _delete(`v1/author?id=${id}`)
     return res
   }
 }

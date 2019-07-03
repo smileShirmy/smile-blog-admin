@@ -98,7 +98,7 @@ export default {
             this.$message.success(`${res.msg}`)
           } else {
             this.loading = false
-            this.$message.error(res.msg)
+            this.$message.error(`${res.msg}`)
           }
         } catch (e) {
           this.loading = false

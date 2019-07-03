@@ -3,7 +3,7 @@
     <div class="view-title">作者列表</div>
     <div class="wrapper">
       <el-card>
-        <el-table :data="authors">
+        <el-table :data="authors" v-loading="loading">
           <el-table-column prop="name" label="作者名"></el-table-column>
           <el-table-column label="操作" width="175">
             <template slot-scope="scope">
@@ -55,6 +55,7 @@ export default {
 
   data() {
     return {
+      loading: false,
       id: 0,
       activeTab: 'info',
       dialogVisible: false,
@@ -92,16 +93,27 @@ export default {
       this.dialogVisible = true
     },
 
-    deleteAuthor() {
+    deleteAuthor(val) {
       this.$confirm('此操作将永久删除该用户, 是否继续?', '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning'
-      }).then(() => {
-        this.$message({
-          type: 'success',
-          message: '删除成功!'
-        });
+      }).then(async () => {
+        try {
+          this.loading = true
+          const res = await author.deleteAuthor(val.id)
+          if (res.errorCode === 0) {
+            this.loading = false
+            await this.getAuthors()
+            this.$message.success(`${res.msg}`)
+          } else {
+            this.loading = false
+            this.$message.error(`${res.msg}`)
+          }
+        } catch (e) {
+          this.loading = false
+          console.log(e)
+        }
       }).catch(() => {
         this.$message({
           type: 'info',
@@ -138,7 +150,7 @@ export default {
     async getAuthors() {
       try {
         this.loading = true
-        this.authors = await author.getAuthors()
+        this.authors = await author.getAdminAuthors()
         this.loading = false
       } catch (e) {
         console.log(e)
