@@ -196,6 +196,9 @@ export default {
                 this.loading = false
                 this.$message.success(`${res.msg}`)
                 this.resetForm(formName)
+              } else {
+                this.loading = false
+                this.$message.error(`${res.msg}`)
               }
             } catch(e) {
               this.loading  = false

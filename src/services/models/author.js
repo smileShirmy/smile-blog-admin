@@ -37,9 +37,15 @@ export default class Author {
     return res
   }
 
-  // 更换密码
+  // 更换作者密码
   static async changePassword(password, id) {
     let res = await put(`v1/author/password?id=${id}`, password)
+    return res
+  }
+
+  // 更换自己的密码
+  static async changeSelfPassword(data) {
+    let res = await put('v1/author/password/self', data)
     return res
   }
 }
