@@ -9,14 +9,16 @@
           prefix-icon="el-icon-search"
           clearable
           v-model="searchVal"
+          maxlength="10"
+          @clear="clearSearch"
         >
         </el-input>
-        <el-button class="search-btn" type="primary" size="medium"
+        <el-button class="search-btn" type="primary" size="medium" @click="search"
           >搜索</el-button
         >
       </div>
     </div>
-    <el-card class="filter-wrapper">
+    <el-card class="filter-wrapper" v-loading="loading">
       <dl class="filter-item">
         <dt class="filter-dt">分类：</dt>
         <div class="dd-wrapper">
@@ -64,12 +66,12 @@
         <div class="dd-wrapper">
           <dd
             class="filter-dd"
-            :class="{ 'is-active': open.id === openId }"
-            v-for="open in opens"
-            :key="open.id"
-            @click="selectFilter(open.id, 'openId')"
+            :class="{ 'is-active': item.id === publicId }"
+            v-for="item in publicList"
+            :key="item.id"
+            @click="selectFilter(item.id, 'publicId')"
           >
-            {{ open.name }}
+            {{ item.name }}
           </dd>
         </div>
       </dl>
@@ -78,24 +80,29 @@
         <div class="dd-wrapper">
           <dd
             class="filter-dd"
-            :class="{ 'is-active': state.id === stateId }"
-            v-for="state in states"
-            :key="state.id"
-            @click="selectFilter(state.id, 'stateId')"
+            :class="{ 'is-active': item.id === statusId }"
+            v-for="item in status"
+            :key="item.id"
+            @click="selectFilter(item.id, 'statusId')"
           >
-            {{ state.name }}
+            {{ item.name }}
           </dd>
         </div>
       </dl>
     </el-card>
-    <el-card class="list-wrapper">
-      <article-table :articleData="articleData"></article-table>
+    <el-card class="list-wrapper" v-loading="tableLoading">
+      <article-table :articleData="articleData" @handleInfoResult="onHandleInfoResult"></article-table>
     </el-card>
   </div>
 </template>
 
 <script>
 import ArticleTable from './article-table';
+import category from '@/services/models/category'
+import tag from '@/services/models/tag'
+import author from '@/services/models/author'
+import article from '@/services/models/article'
+import Utils from '@/services/utils/util'
 
 export default {
   components: {
@@ -104,97 +111,27 @@ export default {
 
   data() {
     return {
+      loading: false,
+      tableLoading: false,
       searchVal: '',
       categoryId: 0,
       authorId: 0,
       tagId: 0,
-      openId: 0,
-      stateId: 0,
-      articleData: [
-        {
-          id: 0,
-          title: 'smile title',
-          authors: [{id: 1, name: 'smile'}, {id: 2, name: 'shirmy'}],
-          cover: 'https://resource.shirmy.me/lighthouse.jpeg',
-          publish: '2019-06-10 23:33:33',
-          category: 'category',
-          tag: 'tag',
-          open: 1,
-          state: 1,
-          likes: 3,
-          comments: 3,
-          views: 100,
-        }
+      publicId: 0,
+      statusId: 0,
+      articleData: [],
+      categories: [],
+      authors: [],
+      tags: [],
+      publicList: [
+        { id: 0, name: '全部' },
+        { id: 1, name: '公开' },
+        { id: 2, name: '私密' }
       ],
-      categories: [
-        {
-          id: 0,
-          name: '全部',
-        },
-        {
-          id: 1,
-          name: 'smile',
-        },
-        {
-          id: 2,
-          name: 'shirmy',
-        }
-      ],
-      authors: [
-        {
-          id: 0,
-          name: '全部',
-        },
-        {
-          id: 1,
-          name: 'smile',
-        },
-        {
-          id: 2,
-          name: 'shirmy',
-        }
-      ],
-      tags: [
-        {
-          id: 0,
-          name: '全部'
-        },
-        {
-          id: 1,
-          name: 'smile',
-        },
-        {
-          id: 2,
-          name: 'shirmy',
-        }
-      ],
-      opens: [
-         {
-          id: 0,
-          name: '全部'
-        },
-        {
-          id: 1,
-          name: '公开',
-        },
-        {
-          id: 2,
-          name: '私密',
-        }
-      ],
-      states: [
-        {
-          id: 0,
-          name: '全部'
-        },
-        {
-          id: 1,
-          name: '已发布',
-        },
-        {
-          id: 2,
-          name: '草稿',
-        }
+      status: [
+        { id: 0, name: '全部' },
+        { id: 1, name: '草稿' },
+        { id: 2, name: '已发布' }
       ]
     }
   },
@@ -205,6 +142,13 @@ export default {
         return
       }
       this[target] = id
+      this.getArticles()
+    },
+
+    onHandleInfoResult(flag) {
+      if (flag === true) {
+        this.getArticles()
+      }
     },
 
     editAritcle() {
@@ -231,7 +175,92 @@ export default {
           message: '已取消删除'
         });          
       });
-    }
+    },
+
+    search() {
+      if (!this.searchVal) {
+        this.$message.warning('搜索内容不能为空')
+        return
+      }
+      this.getArticles()
+    },
+
+    clearSearch() {
+      this.getArticles()
+    },
+
+    async getArticles() {
+      try {
+        this.tableLoading = true
+        let params = {
+          categoryId: this.categoryId,
+          authorId: this.authorId,
+          tagId: this.tagId,
+          publicId: this.publicId,
+          statusId: this.statusId,
+        }
+        if (this.searchVal) {
+          params.search = this.searchVal
+        }
+        let res = await article.getArticles(params)
+        res.forEach(v => {
+          v.created_date = Utils.timestampToTime(v.created_date)
+        })
+        this.articleData = res
+        this.tableLoading = false
+      } catch (e) {
+        this.tableLoading = false
+        console.log(e)
+      }
+    },
+
+    async getCategories() {
+      try {
+        const res = await category.getCategories()
+        res.unshift({
+          id: 0,
+          name: '全部'
+        })
+        this.categories = res
+      } catch (e) {
+        console.log(e)
+      }
+    },
+
+    async getAuthors() {
+      try {
+        const res = await author.getAuthors()
+        res.unshift({
+          id: 0,
+          name: '全部'
+        })
+        this.authors = res
+      } catch (e) {
+        console.log(e)
+      }
+    },
+
+    async getTags() {
+      try {
+        const res = await tag.getTags()
+        res.unshift({
+          id: 0,
+          name: '全部'
+        })
+        this.tags = res
+      } catch (e) {
+        console.log(e)
+      }
+    },
+  },
+
+  async created() {
+    this.loading = true
+    await this.getCategories()
+    await this.getAuthors()
+    await this.getTags()
+    await this.getArticles()
+    this.loading = false
   }
 }
 </script>

@@ -1,6 +1,6 @@
 <template>
   <div>
-    <el-table :data="articleData">
+    <el-table :data="articleData" v-loading="loading">
       <el-table-column type="expand">
         <template slot-scope="props">
           <el-form
@@ -10,29 +10,28 @@
             class="demo-table-expand"
           >
             <el-form-item label="分类">
-              <span>{{ props.row.category }}</span>
+              <span>{{ props.row.category.name }}</span>
             </el-form-item>
             <el-form-item label="浏览次数">
               <span>{{ props.row.views }}</span>
             </el-form-item>
             <el-form-item label="标签">
-              <span>{{ props.row.tag }}</span>
+              <span class="tag-item" v-for="tag in props.row.tags" :key="tag.id">
+                {{ tag.name }}
+              </span>
             </el-form-item>
             <el-form-item label="赞">
-              <span>{{ props.row.likes }}</span>
+              <span>{{ props.row.like }}</span>
             </el-form-item>
             <el-form-item label="封面">
               <img class="cover" :src="props.row.cover">
-            </el-form-item>
-            <el-form-item label="评论数">
-              <span>{{ props.row.comments }}</span>
             </el-form-item>
           </el-form>
         </template>
       </el-table-column>
       <el-table-column prop="title" label="标题"></el-table-column>
       <el-table-column
-        prop="publish"
+        prop="created_date"
         label="发布时间"
         sortable
         width="170"
@@ -48,14 +47,14 @@
         </template>
       </el-table-column>
       <el-table-column
-        prop="open"
+        prop="public"
         label="是否公开"
-        :formatter="row => openMaps[row.open]"
+        :formatter="row => publicMap[row.public]"
       ></el-table-column>
       <el-table-column
-        prop="state"
+        prop="status"
         label="状态"
-        :formatter="row => stateMaps[row.state]"
+        :formatter="row => statusMap[row.status]"
       ></el-table-column>
       <el-table-column label="操作" fixed="right" width="250">
         <template slot-scope="scope">
@@ -83,14 +82,15 @@
 
 <script>
 import Comments from './comments'
+import article from '@/services/models/article'
 
-const openMaps = {
+const publicMap = {
   1: '公开',
   2: '私密',
 }
 
-const stateMaps = {
-  1: '发布',
+const statusMap = {
+  1: '已发布',
   2: '私密',
 }
 
@@ -108,8 +108,9 @@ export default {
 
   data() {
     return {
-      openMaps,
-      stateMaps,
+      loading: false,
+      publicMap,
+      statusMap,
       dialogVisible: false,
     }
   },
@@ -131,22 +132,30 @@ export default {
       this.dialogVisible = true
     },
 
-    deleteArticle() {
+    deleteArticle(val) {
       this.$confirm('此操作将删除文章, 是否继续?', '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning'
-      }).then(() => {
-        this.$message({
-          type: 'success',
-          message: '删除成功!'
-        });
+      }).then(async () => {
+        try {
+          this.loading = true
+          const res = await article.deleteArticle(val.id)
+          if (res.errorCode === 0) {
+            this.loading = false
+            this.$message.success(`${res.msg}`)
+            this.$emit('handleInfoResult', true)
+          } else {
+            this.loading = false
+            this.$message.error(`${res.msg}`)
+          }
+        } catch (e) {
+          this.loading = false
+          console.log(e)
+        }
       }).catch(() => {
-        this.$message({
-          type: 'info',
-          message: '已取消删除'
-        });
-      });
+        this.$message.info('已取消删除')
+      })
     }
   },
 
@@ -154,6 +163,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.tag-item,
 .author-item {
   margin-right: 4px;
 
