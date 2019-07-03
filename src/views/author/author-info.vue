@@ -214,14 +214,14 @@ export default {
               auth: 8
             }
             try {
-              const res = await author.updateAuthor(data)
+              const res = await author.updateAuthor(data, this.id)
               if (res.errorCode === 0) {
                 this.loading = false
                 this.$message.success(`${res.msg}`)
                 this.$emit('handleInfoResult', true)
               } else {
                 this.loading = false
-                this.$message(`${res.msg}`)
+                this.$message.error(`${res.msg}`)
               }
             } catch (e) {
               this.loading = false

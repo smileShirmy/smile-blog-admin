@@ -30,7 +30,7 @@
             <author-info ref="info" :isSubmit="false" :infoType="'edit'" :info="form" :id="id" @handleInfoResult="onHandleInfoResult"></author-info>
           </el-tab-pane>
           <el-tab-pane label="修改密码" name="authorPassword">
-            <author-password ref="password" :id="id"></author-password>
+            <author-password ref="password" :id="id" @handlePasswordResult="onHandlePasswordResult"></author-password>
           </el-tab-pane>
         </el-tabs>
       </div>
@@ -74,6 +74,12 @@ export default {
       if (flag === true) {
         this.dialogVisible = false
         this.getAuthors()
+      }
+    },
+
+    onHandlePasswordResult(flag) {
+      if (flag === true) {
+        this.dialogVisible = false
       }
     },
 

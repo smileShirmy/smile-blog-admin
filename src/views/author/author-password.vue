@@ -1,6 +1,6 @@
 <template>
   <div>
-    <el-form ref="form" :model="form" status-icon :rules="rules" label-width="100px">
+    <el-form ref="form" :model="form" status-icon :rules="rules" label-width="100px" v-loading="loading">
       <el-form-item label="新密码" prop="newPassword">
         <el-input
           type="password"
@@ -8,6 +8,7 @@
           clearable
           v-model="form.newPassword"
           autocomplete="off"
+          show-password
         ></el-input>
       </el-form-item>
       <el-form-item label="确认密码" prop="confirmPassword">
@@ -17,6 +18,7 @@
           clearable
           v-model="form.confirmPassword"
           autocomplete="off"
+          show-password
         ></el-input>
       </el-form-item>
     </el-form>
@@ -24,10 +26,14 @@
 </template>
 
 <script>
+import author from '@/services/models/author'
+
 export default {
   props: {
-    id: Number,
-    default: undefined
+    id: {
+      type: Number,
+      default: undefined
+    }
   },
 
   data() {
@@ -36,6 +42,8 @@ export default {
         callback(new Error('请输入密码'))
       } else if (value.length < 6) {
         callback(new Error('密码长度不能少于6位数'))
+      } else if (!/^(?![0-9]+$)(?![a-zA-Z]+$)[0-9A-Za-z]/.test(value)) {
+        callback(new Error('密码需要由字母和数字组成'))
       } else {
         if (this.form.confirmPassword !== '') {
           this.$refs.form.validateField('confirmPassword')
@@ -53,6 +61,7 @@ export default {
       }
     }
     return {
+      loading: false,
       form: {
         newPassword: '',
         confirmPassword: '',
@@ -70,14 +79,30 @@ export default {
 
   methods: {
     submitForm(formName) {
-      this.$refs[formName].validate((valid) => {
+      this.$refs[formName].validate(async (valid) => {
         if (valid) {
-          this.$message.success('修改成功')
+          const data = {
+            password: this.form.newPassword
+          }
+          try {
+            const res = await author.changePassword(data, this.id)
+            if (res.errorCode === 0) {
+              this.loading = false
+              this.$message.success(`${res.msg}`)
+              this.resetForm(formName)
+              this.$emit('handlePasswordResult', true)
+            } else {
+              this.loading = false
+              this.$message.error(`${res.msg}`)
+            }
+          } catch (e) {
+            this.loading = false
+            console.log(e)
+          }
         } else {
           this.$message.error('请填写正确的信息')
         }
       })
-      this.resetForm(formName);
     },
 
     resetForm(formName) {

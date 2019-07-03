@@ -32,8 +32,14 @@ export default class Author {
   }
 
   // 更新作者信息
-  static async updateAuthor(author) {
-    let res = await put('v1/author/info', author)
+  static async updateAuthor(author, id) {
+    let res = await put(`v1/author/info?id=${id}`, author)
+    return res
+  }
+
+  // 更换密码
+  static async changePassword(password, id) {
+    let res = await put(`v1/author/password?id=${id}`, password)
     return res
   }
 }
