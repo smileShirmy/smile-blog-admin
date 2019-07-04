@@ -61,8 +61,8 @@
           <el-button type="primary" size="mini" @click="editArticle(scope.row)"
             >编辑</el-button
           >
-          <el-button type="primary" size="mini" @click="openArticle(scope.row)"
-            >私密</el-button
+          <el-button type="primary" size="mini" @click="setArticlePrivate(scope.row)"
+            >{{scope.row.public === 1 ? '私密' : '公开'}}</el-button
           >
           <el-button type="primary" size="mini" @click="showComments(scope.row)"
             >评论</el-button
@@ -124,8 +124,27 @@ export default {
 
     },
 
-    openArticle() {
-
+    // 设文章为 公开 / 私密
+    async setArticlePrivate(val) {
+      try {
+        this.loading = true
+        const params = {
+          publicId: val.public === 1 ? 2 : 1
+        }
+        const res = await article.updateArticlePublic(val.id, params)
+        if (res.errorCode === 0) {
+          this.loading = false
+          this.$message.success(`${res.msg}`)
+          this.$emit('handleInfoResult', true)
+        } else {
+          this.loading = false
+          this.$message.error(`${res.msg}`)
+        }
+        this.loading = false
+      } catch (e) {
+        this.loading = false
+        console.log(e)
+      }
     },
 
     showComments() {

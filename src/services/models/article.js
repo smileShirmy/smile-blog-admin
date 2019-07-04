@@ -1,6 +1,7 @@
 import {
   get,
   post,
+  put,
   _delete
 } from '@/services/plugins/axios'
 
@@ -20,6 +21,11 @@ class Article {
   // 删除某篇文章
   async deleteArticle(id) {
     const res = await _delete(`v1/article?id=${id}`)
+    return res
+  }
+
+  async updateArticlePublic(id, params) {
+    const res = await put(`v1/article/public?id=${id}`, params)
     return res
   }
 }
