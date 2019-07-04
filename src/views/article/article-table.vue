@@ -75,7 +75,7 @@
     </el-table>
     <!-- 评论弹窗 -->
     <el-dialog append-to-body :visible.sync="dialogVisible" :before-close="handleClose">
-      <comments></comments>
+      <comments v-if="dialogVisible" :id="currentId"></comments>
     </el-dialog>
   </div>
 </template>
@@ -108,6 +108,7 @@ export default {
 
   data() {
     return {
+      currentId: null,
       loading: false,
       publicMap,
       statusMap,
@@ -147,7 +148,8 @@ export default {
       }
     },
 
-    showComments() {
+    showComments(val) {
+      this.currentId = val.id
       this.dialogVisible = true
     },
 
