@@ -3,6 +3,7 @@ import axios from 'axios'
 import Config from '@/config/index'
 import { getToken } from '@/services/utils/cookie'
 import store from '@/store'
+import author from '@/services/models/author'
 
 
 const config = {
@@ -107,22 +108,31 @@ _axios.interceptors.response.use(async (res) => {
       msg = showMsg
     }
 
-    // 如果是令牌无效或者是refreshToken 相关异常
-    // if (errorCode === 10000 || errorCode === 10100) {
-    //   setTimeout(() => {
-    //     store.dispatch('loginOut')
-    //     const { origin } = window.location
-    //     window.location.href = origin
-    //   }, 1500)
-    // }
-    console.log('errorCode:', errorCode)
+    // 如果是令牌无效或者是 refreshToken 相关异常
+    if (errorCode === 10010 || errorCode === 10100) {
+      setTimeout(() => {
+        store.dispatch('loginOut')
+        const { origin } = window.location
+        window.location.href = origin
+      }, 1500)
+    }
 
+    // 令牌失效 或 令牌过期 需要重新刷新令牌
+    if (errorCode === 10020 || errorCode === 10030) {
+      const cache = {}
+      if (cache.url !== url) {
+        cache.url = url
+        await author.getRefreshToken()
+        const result = await _axios(store.state.refreshOptions)
+        resolve(result)
+        return
+      }
+    }
+    
     Vue.prototype.$message({
       message: msg || '未知的errorCode',
       type: 'error',
     })
-
-    // TODO: 令牌相关，刷新令牌
 
     reject(res.data)
   })

@@ -4,7 +4,7 @@ import {
   put,
   _delete
 } from '@/services/plugins/axios'
-import { saveTokens } from '../utils/cookie'
+import { saveTokens, saveAccessToken } from '../utils/cookie'
 
 export default class Author {
   static async getToken(name, password) {
@@ -14,6 +14,12 @@ export default class Author {
     })
     saveTokens(tokens.accessToken, tokens.refreshToken)
     return tokens
+  }
+
+  // 刷新令牌
+  static async getRefreshToken() {
+    const res = await get('v1/author/refresh')
+    saveAccessToken(res.accessToken)
   }
 
   // 获取某个作者的信息
