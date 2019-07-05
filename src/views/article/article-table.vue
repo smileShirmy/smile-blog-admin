@@ -91,7 +91,7 @@ const publicMap = {
 
 const statusMap = {
   1: '已发布',
-  2: '私密',
+  2: '草稿',
 }
 
 export default {
@@ -121,8 +121,8 @@ export default {
       this.dialogVisible = false
     },
 
-    editArticle() {
-
+    editArticle(val) {
+      this.$emit('handleEdit', val)
     },
 
     // 设文章为 公开 / 私密

@@ -16,12 +16,9 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import '@/assets/scss/variables.scss';
 @import '@/assets/scss/animation.scss';
 
 .container {
-  background: $background-color-main;
-
   .wrapper {
     width: 100%;
     height: 100%;

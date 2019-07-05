@@ -1,6 +1,12 @@
 <template>
   <div class="container">
-    <div class="view-title">添加文章</div>
+    <div class="view-title">
+      {{infoType === 'add' ? '添加文章' : '编辑文章'}}
+      <span v-if="infoType === 'edit'" class="back" @click="$emit('handleBack', false)">
+        <i class="el-icon-back"></i>
+        返回
+      </span>
+    </div>
     <div class="form-wrapper">
       <el-row>
         <el-col :lg="23" :md="23" :sm="24" :xs="24">
@@ -79,7 +85,8 @@
                 </el-option>
               </el-select>
             </el-form-item>
-            <el-form-item label="时间" prop="createdDate">
+            <el-form-item
+              label="时间" prop="createdDate">
               <el-date-picker
                 v-model="form.createdDate"
                 size="medium"
@@ -107,8 +114,8 @@
                 size="medium"
                 placeholder="请选择是否发布"
               >
-                <el-option :key="1" :label="'草稿'" :value="1"></el-option>
-                <el-option :key="2" :label="'发布'" :value="2"></el-option>
+                <el-option :key="1" :label="'发布'" :value="1"></el-option>
+                <el-option :key="2" :label="'草稿'" :value="2"></el-option>
               </el-select>
             </el-form-item>
             <el-form-item label="内容" prop="content">
@@ -143,6 +150,26 @@ export default {
     infoType: {
       type: String,
       default: 'add'
+    },
+
+    info: {
+      type: Object,
+      default: () => {}
+    },
+
+    infoAuthors: {
+      type: Array,
+      default: () => []
+    },
+
+    infoCategories: {
+      type: Array,
+      default: () => []
+    },
+
+    infoTags: {
+      type: Array,
+      default: () => []
     }
   },
 
@@ -171,7 +198,7 @@ export default {
           { trigger: 'change', message: '请选择作者', required: true}
         ],
         createdDate: [
-          { trigger: 'blur', message: '情选择创建时间', required: true}
+          { trigger: 'blur', message: '请选择创建时间', required: true}
         ],
         cover: [
           { type: 'url', trigger: 'blur', message: '请输入正确的封面地址', required: true }
@@ -218,9 +245,42 @@ export default {
             }
           } else {
             // 编辑文章
+            if (this.isEquel(this.info, this.form)) {
+              this.$emit('handleBack', false)
+              return
+            }
+            try {
+              console.log(this.form)
+              const res = await article.updateArticle(this.form)
+              if (res.errorCode === 0) {
+                this.$message.success(`${res.msg}`)
+                this.$emit('handleBack', true)
+              } else {
+                this.$message.error(`${res.msg}`)
+              }
+            } catch (e) {
+              console.log(e)
+            }
           }
         }
       })
+    },
+
+    // 判断是否有更改字段
+    isEquel(source, target) {
+      let isEquel = true
+      for (let key in source) {
+        if (Array.isArray(source[key])) {
+          if (source[key].join('') !== target[key].join('')) {
+            isEquel = false
+          }
+        } else {
+          if (source[key] !== target[key]) {
+            isEquel = false
+          }
+        }
+      }
+      return isEquel
     },
 
     resetForm(formName) {
@@ -253,13 +313,29 @@ export default {
       } catch (e) {
         console.log(e)
       }
+    },
+
+    // 过滤全部
+    fitlerAll(arr) {
+      let result = [].concat(arr)
+      result.shift()
+      return result
     }
   },
 
   created() {
-    this.getCategories()
-    this.getTags()
-    this.getAuthors()
+    if (this.infoType === 'add') {
+      // 添加文章
+      this.getCategories()
+      this.getTags()
+      this.getAuthors()
+    } else {
+      // 编辑文章
+      this.categories = this.fitlerAll(this.infoCategories)
+      this.tags = this.fitlerAll(this.infoTags)
+      this.authors = this.fitlerAll(this.infoAuthors)
+      this.form = JSON.parse(JSON.stringify(this.info))
+    }
   }
 };
 </script>
@@ -270,6 +346,19 @@ export default {
 
 .view-title {
   @include view-common-title;
+  justify-content: space-between;
+
+  .back {
+    cursor: pointer;
+
+    &:hover {
+      color: $menu-item-hover;
+    }
+
+    > i {
+      margin-right: 5px;
+    }
+  }
 }
 
 .form-wrapper {

@@ -41,6 +41,18 @@ class Article {
     const res = await _delete(`v1/article/del/comment?id=${id}`)
     return res
   }
+
+  // 获取某篇文章的内容
+  async getContent(id) {
+    const res = await get(`v1/article/content?id=${id}`)
+    return res
+  }
+
+  // 更新某篇文章
+  async updateArticle(article) {
+    const res = await put('v1/article', article)
+    return res
+  }
 }
 
 export default new Article()

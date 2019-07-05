@@ -1,116 +1,131 @@
 <template>
-  <div class="container">
-    <div class="view-title">
-      <span>文章列表</span>
-      <div class="search-wrapper">
-        <el-input
-          size="medium"
-          placeholder="搜索..."
-          prefix-icon="el-icon-search"
-          clearable
-          v-model="searchVal"
-          maxlength="10"
-          @clear="clearSearch"
-        >
-        </el-input>
-        <el-button class="search-btn" type="primary" size="medium" @click="search"
-          >搜索</el-button
-        >
+  <div>
+    <div v-if="!isEdit" class="container">
+      <div class="view-title">
+        <span>文章列表</span>
+        <div class="search-wrapper">
+          <el-input
+            size="medium"
+            placeholder="搜索..."
+            prefix-icon="el-icon-search"
+            clearable
+            v-model="searchVal"
+            maxlength="10"
+            @clear="clearSearch"
+          >
+          </el-input>
+          <el-button class="search-btn" type="primary" size="medium" @click="search"
+            >搜索</el-button
+          >
+        </div>
       </div>
+      <el-card class="filter-wrapper" v-loading="loading">
+        <dl class="filter-item">
+          <dt class="filter-dt">分类：</dt>
+          <div class="dd-wrapper">
+            <dd
+              class="filter-dd"
+              :class="{ 'is-active': category.id === categoryId }"
+              v-for="category in categories"
+              :key="category.id"
+              @click="selectFilter(category.id, 'categoryId')"
+            >
+              {{ category.name }}
+            </dd>
+          </div>
+        </dl>
+        <dl class="filter-item">
+          <dt class="filter-dt">作者：</dt>
+          <div class="dd-wrapper">
+            <dd
+              class="filter-dd"
+              :class="{ 'is-active': author.id === authorId }"
+              v-for="author in authors"
+              :key="author.id"
+              @click="selectFilter(author.id, 'authorId')"
+            >
+              {{ author.name }}
+            </dd>
+          </div>
+        </dl>
+        <dl class="filter-item">
+          <dt class="filter-dt">标签：</dt>
+          <div class="dd-wrapper">
+            <dd
+              class="filter-dd"
+              :class="{ 'is-active': tag.id === tagId }"
+              v-for="tag in tags"
+              :key="tag.id"
+              @click="selectFilter(tag.id, 'tagId')"
+            >
+              {{ tag.name }}
+            </dd>
+          </div>
+        </dl>
+        <dl class="filter-item">
+          <dt class="filter-dt">公开：</dt>
+          <div class="dd-wrapper">
+            <dd
+              class="filter-dd"
+              :class="{ 'is-active': item.id === publicId }"
+              v-for="item in publicList"
+              :key="item.id"
+              @click="selectFilter(item.id, 'publicId')"
+            >
+              {{ item.name }}
+            </dd>
+          </div>
+        </dl>
+        <dl class="filter-item">
+          <dt class="filter-dt">状态：</dt>
+          <div class="dd-wrapper">
+            <dd
+              class="filter-dd"
+              :class="{ 'is-active': item.id === statusId }"
+              v-for="item in status"
+              :key="item.id"
+              @click="selectFilter(item.id, 'statusId')"
+            >
+              {{ item.name }}
+            </dd>
+          </div>
+        </dl>
+      </el-card>
+      <el-card class="list-wrapper" v-loading="tableLoading">
+        <article-table :articleData="articleData" @handleInfoResult="onHandleInfoResult" @handleEdit="onHandleEdit"></article-table>
+      </el-card>
     </div>
-    <el-card class="filter-wrapper" v-loading="loading">
-      <dl class="filter-item">
-        <dt class="filter-dt">分类：</dt>
-        <div class="dd-wrapper">
-          <dd
-            class="filter-dd"
-            :class="{ 'is-active': category.id === categoryId }"
-            v-for="category in categories"
-            :key="category.id"
-            @click="selectFilter(category.id, 'categoryId')"
-          >
-            {{ category.name }}
-          </dd>
-        </div>
-      </dl>
-      <dl class="filter-item">
-        <dt class="filter-dt">作者：</dt>
-        <div class="dd-wrapper">
-          <dd
-            class="filter-dd"
-            :class="{ 'is-active': author.id === authorId }"
-            v-for="author in authors"
-            :key="author.id"
-            @click="selectFilter(author.id, 'authorId')"
-          >
-            {{ author.name }}
-          </dd>
-        </div>
-      </dl>
-      <dl class="filter-item">
-        <dt class="filter-dt">标签：</dt>
-        <div class="dd-wrapper">
-          <dd
-            class="filter-dd"
-            :class="{ 'is-active': tag.id === tagId }"
-            v-for="tag in tags"
-            :key="tag.id"
-            @click="selectFilter(tag.id, 'tagId')"
-          >
-            {{ tag.name }}
-          </dd>
-        </div>
-      </dl>
-      <dl class="filter-item">
-        <dt class="filter-dt">公开：</dt>
-        <div class="dd-wrapper">
-          <dd
-            class="filter-dd"
-            :class="{ 'is-active': item.id === publicId }"
-            v-for="item in publicList"
-            :key="item.id"
-            @click="selectFilter(item.id, 'publicId')"
-          >
-            {{ item.name }}
-          </dd>
-        </div>
-      </dl>
-      <dl class="filter-item">
-        <dt class="filter-dt">状态：</dt>
-        <div class="dd-wrapper">
-          <dd
-            class="filter-dd"
-            :class="{ 'is-active': item.id === statusId }"
-            v-for="item in status"
-            :key="item.id"
-            @click="selectFilter(item.id, 'statusId')"
-          >
-            {{ item.name }}
-          </dd>
-        </div>
-      </dl>
-    </el-card>
-    <el-card class="list-wrapper" v-loading="tableLoading">
-      <article-table :articleData="articleData" @handleInfoResult="onHandleInfoResult"></article-table>
-    </el-card>
+    <div v-if="isEdit">
+      <article-info
+        :infoType="'edit'"
+        :info="form"
+        :infoCategories="categories"
+        :infoTags="tags"
+        :infoAuthors="authors"
+        @handleBack="onHandleBack"
+      ></article-info>
+    </div>
   </div>
 </template>
 
 <script>
-import ArticleTable from './article-table';
+import ArticleTable from './article-table'
 import category from '@/services/models/category'
 import tag from '@/services/models/tag'
 import author from '@/services/models/author'
 import article from '@/services/models/article'
 import Utils from '@/services/utils/util'
+import ArticleInfo from './article-info'
 
 export default {
   components: {
-    ArticleTable
+    ArticleTable,
+    ArticleInfo
   },
 
   data() {
     return {
+      isEdit: false,
       loading: false,
       tableLoading: false,
       searchVal: '',
@@ -132,7 +147,8 @@ export default {
         { id: 0, name: '全部' },
         { id: 1, name: '草稿' },
         { id: 2, name: '已发布' }
-      ]
+      ],
+      form: {}
     }
   },
 
@@ -151,8 +167,34 @@ export default {
       }
     },
 
-    editAritcle() {
+    onHandleBack(flag) {
+      this.isEdit = false
+      if (flag === true) {
+        this.getArticles()
+      }
+    },
 
+    async onHandleEdit(data) {
+      let edit = {
+        id: data.id,
+        title: data.title,
+        authors: data.authors.map(v => v.id),
+        createdDate: data.created_date,
+        cover: data.cover,
+        content: '',
+        categoryId: data.category_id,
+        tags: data.tags.map(v => v.id),
+        public: data.public,
+        status: data.status
+      }
+      try {
+        const res = await article.getContent(data.id)
+        edit.content = res.content
+        this.form = edit
+        this.isEdit = true
+      } catch (e) {
+        console.log(e)
+      }
     },
 
     search() {

@@ -11,9 +11,9 @@ const articleRouter = {
     {
       title: '添加文章',
       type: 'view',
-      name: 'article-add',
+      name: 'article-info',
       route: '/article/add',
-      filePath: 'views/article/article-add.vue',
+      filePath: 'views/article/article-info.vue',
       inNav: true,
       icon: ''
     },
