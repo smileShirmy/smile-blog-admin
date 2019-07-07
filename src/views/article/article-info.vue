@@ -33,6 +33,16 @@
                 placeholder="请输入封面地址"
               ></el-input>
             </el-form-item>
+            <el-form-item label="描述" prop="content">
+              <el-input
+                type="textarea"
+                v-model="form.description"
+                :autosize="{ minRows: 5, maxRows: 10 }"
+                placeholder="请输入描述"
+                maxlength="140"
+                show-word-limit
+              ></el-input>
+            </el-form-item>
             <el-form-item label="作者" prop="authors">
               <el-select
                 v-model="form.authors"
@@ -179,6 +189,7 @@ export default {
       form: {
         title: '',
         authors: [],
+        description: '',
         createdDate: '',
         cover: '',
         content: '',
@@ -196,6 +207,9 @@ export default {
         ],
         authors: [
           { trigger: 'change', message: '请选择作者', required: true}
+        ],
+        description: [
+          { trigger: 'blur', message: '请输入描述', required: true }
         ],
         createdDate: [
           { trigger: 'blur', message: '请选择创建时间', required: true}

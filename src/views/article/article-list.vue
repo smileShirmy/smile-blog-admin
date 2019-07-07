@@ -178,6 +178,7 @@ export default {
       let edit = {
         id: data.id,
         title: data.title,
+        description: data.description,
         authors: data.authors.map(v => v.id),
         createdDate: data.created_date,
         cover: data.cover,
