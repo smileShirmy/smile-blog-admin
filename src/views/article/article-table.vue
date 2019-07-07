@@ -59,6 +59,14 @@
         label="状态"
         :formatter="row => statusMap[row.status]"
       ></el-table-column>
+      <el-table-column
+        prop="star"
+        label="设为精选"
+      >
+        <template slot-scope="scope">
+          <i :class="['star el-icon-star-off', scope.row.star === 2 ? 'star-on' : '']" @click="setArticleStar(scope.row)"></i>
+        </template>
+      </el-table-column>
       <el-table-column label="操作" fixed="right" width="250">
         <template slot-scope="scope">
           <el-button type="primary" size="mini" @click="editArticle(scope.row)"
@@ -151,6 +159,29 @@ export default {
       }
     },
 
+    // 设置文章为 精选 / 非精选
+    async setArticleStar(val) {
+      try {
+        this.loading = true
+        const params = {
+          starId: val.star === 1 ? 2 : 1
+        }
+        const res = await article.updateArticleStar(val.id, params)
+        if (res.errorCode === 0) {
+          this.loading = false
+          this.$message.success(`${res.msg}`)
+          this.$emit('handleInfoResult', true)
+        } else {
+          this.loading = false
+          this.$message.error(`${res.msg}`)
+        }
+        this.loading = false
+      } catch (e) {
+        this.loading = false
+        console.log(e)
+      }
+    },
+
     showComments(val) {
       this.currentId = val.id
       this.dialogVisible = true
@@ -213,5 +244,14 @@ export default {
 .cover {
   max-width: 150px;
   max-height: 150px;
+}
+
+.star {
+  font-size: 20px;
+  cursor: pointer;
+}
+
+.star-on {
+  color: #4093ff;
 }
 </style>

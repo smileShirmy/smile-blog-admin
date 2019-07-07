@@ -33,7 +33,7 @@
                 placeholder="请输入封面地址"
               ></el-input>
             </el-form-item>
-            <el-form-item label="描述" prop="content">
+            <el-form-item label="描述" prop="description">
               <el-input
                 type="textarea"
                 v-model="form.description"
@@ -128,6 +128,18 @@
                 <el-option :key="2" :label="'草稿'" :value="2"></el-option>
               </el-select>
             </el-form-item>
+            <el-form-item label="精选" prop="status">
+              <el-select
+                v-model="form.status"
+                filterable
+                allow-create
+                size="medium"
+                placeholder="请选择是为精选文章"
+              >
+                <el-option :key="1" :label="'非精选'" :value="1"></el-option>
+                <el-option :key="2" :label="'精选'" :value="2"></el-option>
+              </el-select>
+            </el-form-item>
             <el-form-item label="内容" prop="content">
               <el-input
                 type="textarea"
@@ -197,6 +209,7 @@ export default {
         tags: [],
         public: 1,
         status: 1,
+        star: 1,
       },
       authors: [],
       categories: [],
@@ -231,6 +244,9 @@ export default {
         ],
         status: [
           { type: 'number', message: '请选择发布或草稿', required: true }
+        ],
+        star: [
+          { type: 'number', message: '请选择是否为精选', required: true }
         ]
       }
     }

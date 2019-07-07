@@ -90,6 +90,20 @@
             </dd>
           </div>
         </dl>
+        <dl class="filter-item">
+          <dt class="filter-dt">状态：</dt>
+          <div class="dd-wrapper">
+            <dd
+              class="filter-dd"
+              :class="{ 'is-active': item.id === starId }"
+              v-for="item in star"
+              :key="item.id"
+              @click="selectFilter(item.id, 'starId')"
+            >
+              {{ item.name }}
+            </dd>
+          </div>
+        </dl>
       </el-card>
       <el-card class="list-wrapper" v-loading="tableLoading">
         <article-table :articleData="articleData" @handleInfoResult="onHandleInfoResult" @handleEdit="onHandleEdit"></article-table>
@@ -134,6 +148,7 @@ export default {
       tagId: 0,
       publicId: 0,
       statusId: 0,
+      starId: 0,
       articleData: [],
       categories: [],
       authors: [],
@@ -145,8 +160,13 @@ export default {
       ],
       status: [
         { id: 0, name: '全部' },
-        { id: 1, name: '草稿' },
-        { id: 2, name: '已发布' }
+        { id: 1, name: '已发布' },
+        { id: 2, name: '草稿' }
+      ],
+      star: [
+        { id: 0, name: '全部' },
+        { id: 1, name: '非精选' },
+        { id: 2, name: '精选' }
       ],
       form: {}
     }
@@ -186,7 +206,8 @@ export default {
         categoryId: data.category_id,
         tags: data.tags.map(v => v.id),
         public: data.public,
-        status: data.status
+        status: data.status,
+        star: data.star
       }
       try {
         const res = await article.getContent(data.id)
@@ -219,6 +240,7 @@ export default {
           tagId: this.tagId,
           publicId: this.publicId,
           statusId: this.statusId,
+          starId: this.starId
         }
         if (this.searchVal) {
           params.search = this.searchVal

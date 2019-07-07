@@ -73,7 +73,7 @@ export default {
         this.loading = true
         let res = await article.getComments(this.id)
         res.forEach(v => {
-          v.createdDate = Utils.timestampToTime(v.createdDate)
+          v.createdDate = Utils.timestampToTime(v.created_date)
           if (v.parent_id !== 0) {
             const reply = res.find(target => target.id === v.parent_id)
             if (reply) {

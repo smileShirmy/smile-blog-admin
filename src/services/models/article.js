@@ -30,6 +30,12 @@ class Article {
     return res
   }
 
+  // 设为精选
+  async updateArticleStar(id, params) {
+    const res = await put(`v1/article/star?id=${id}`, params)
+    return res
+  }
+
   // 获取该文章的所有评论
   async getComments(id) {
     const res = await get(`v1/article/get/comment?articleId=${id}`)

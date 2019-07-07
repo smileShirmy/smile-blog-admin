@@ -169,7 +169,7 @@ Utils.timestampToTime = (timestamp, formats) => {
   const day = zero(myDate.getDate())
 
   const hour = zero(myDate.getHours())
-  const minite = zero(myDate.getMinutes())
+  const minute = zero(myDate.getMinutes())
   const second = zero(myDate.getSeconds())
 
   return formats.replace(/Y|m|d|H|i|s/ig, function (matches) {
@@ -178,7 +178,7 @@ Utils.timestampToTime = (timestamp, formats) => {
           m: month,
           d: day,
           H: hour,
-          i: minite,
+          i: minute,
           s: second
       })[matches]
   })
