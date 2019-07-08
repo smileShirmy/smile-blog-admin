@@ -91,7 +91,7 @@
           </div>
         </dl>
         <dl class="filter-item">
-          <dt class="filter-dt">状态：</dt>
+          <dt class="filter-dt">精选：</dt>
           <div class="dd-wrapper">
             <dd
               class="filter-dd"
@@ -139,6 +139,7 @@ export default {
 
   data() {
     return {
+      total: 0,
       isEdit: false,
       loading: false,
       tableLoading: false,
@@ -245,11 +246,12 @@ export default {
         if (this.searchVal) {
           params.search = this.searchVal
         }
-        let res = await article.getArticles(params)
-        res.forEach(v => {
+        let { articles, total } = await article.getArticles(params)
+        articles.forEach(v => {
           v.created_date = Utils.timestampToTime(v.created_date)
         })
-        this.articleData = res
+        this.total = total
+        this.articleData = articles
         this.tableLoading = false
       } catch (e) {
         this.tableLoading = false
