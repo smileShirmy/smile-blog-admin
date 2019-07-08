@@ -19,6 +19,7 @@
         </footer>
       </div>
     </li>
+    <div v-if="!comments.length">暂无评论</div>
   </ul>
 </template>
 
