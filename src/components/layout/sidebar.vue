@@ -1,6 +1,6 @@
 <template>
   <div class="sidebar">
-    <div class="logo">smile</div> 
+    <div class="logo">admin</div> 
     <el-menu
       class="el-menu-vertical-demo"
       :default-active="defaultActive"

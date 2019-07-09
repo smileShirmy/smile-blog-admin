@@ -1,7 +1,7 @@
 <template>
   <div class="author">
     <el-dropdown>
-      <i class="avatar-icon"></i>
+      <i class="avatar-icon" :style="{backgroundImage: `url(${author.avatar})`}"></i>
       <el-dropdown-menu slot="dropdown" class="author-wrapper">
         <ul class="author-wrapper">
           <li @click="changePassword">
@@ -62,7 +62,7 @@
 </template>
 
 <script>
-import { mapActions } from 'vuex'
+import { mapActions, mapGetters } from 'vuex'
 import author from '@/services/models/author'
 
 export default {
@@ -121,6 +121,11 @@ export default {
       },
     }
   },
+
+  computed: {
+    ...mapGetters(['author'])
+  },
+
   methods: {
     ...mapActions(['loginOut']),
 
@@ -187,7 +192,9 @@ export default {
   width: 40px;
   height: 40px;
   border-radius: 50%;
-  background: #eee;
+  background-repeat: no-repeat;
+  background-position: center center;
+  background-size: cover;
   outline: none;
 }
 
