@@ -11,19 +11,13 @@ install:
 script:
 - npm run build
 before_install:
-- openssl aes-256-cbc -K $encrypted_bb2d5a590d7b_key -iv $encrypted_bb2d5a590d7b_iv
-  -in deploy_rsa.enc -out ~/.ssh/deploy_rsa -d
+- openssl aes-256-cbc -K $encrypted_3643358f8e90_key -iv $encrypted_3643358f8e90_iv
+  -in id_rsa.enc -out ~\/.ssh/id_rsa -d
 - eval "$(ssh-agent -s)"
-- chmod 600 ~/.ssh/deploy_rsa
-- ssh-add ~/.ssh/deploy_rsa
+- chmod 600 ~/.ssh/id_rsa
+- ssh-add ~/.ssh/id_rsa
 after_success:
 - ssh "$DEPLOY_USER"@"$DEPLOY_HOST" -o StrictHostKeyChecking=no 'cd /data/smile-blog-admin && git pull && bash ./script/deploy.sh'
-# notifications:
-#   email:
-#     recipients:
-#     - qiushiming1997@gmail.com
-#     on_success: always
-#     on_failure: always
 addons:
   ssh_known_hosts:
   - "$DEPLOY_HOST"
