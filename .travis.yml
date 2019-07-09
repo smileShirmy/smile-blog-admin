@@ -11,8 +11,7 @@ install:
 script:
 - npm run build
 before_install:
-- openssl aes-256-cbc -K $encrypted_3643358f8e90_key -iv $encrypted_3643358f8e90_iv
-  -in id_rsa.enc -out ~\/.ssh/id_rsa -d
+- openssl aes-256-cbc -K $encrypted_3643358f8e90_key -iv $encrypted_3643358f8e90_iv -in id_rsa.enc -out ~/.ssh/id_rsa -d
 - eval "$(ssh-agent -s)"
 - chmod 600 ~/.ssh/id_rsa
 - ssh-add ~/.ssh/id_rsa
