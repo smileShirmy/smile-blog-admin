@@ -1,8 +1,9 @@
 <template>
   <div class="login">
-    <el-card v-loading="loading" element-loading-background="rgba(0, 0, 0, 0)">
+    <div class="overlay"></div>
+    <el-card class="card" v-loading="loading" element-loading-background="rgba(0, 0, 0, 0)">
       <header class="logo">
-        blog admin
+        夏季指南
       </header>
       <form class="form-box" @submit.prevent="throttleLogin">
         <div class="form-item">
@@ -80,8 +81,23 @@ export default {
   align-items: center;
   width: 100%;
   height: 100%;
-  background-color: rgba(0, 0, 0, .3);
+  background: url('../../assets/images/lighthouse.jpeg') no-repeat center center;
+  background-size: cover;
+
+  .overlay {
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    background-color: rgba(0, 0, 0, .3);
+  }
+
+  .card {
+    transform: translateY(-40%);
+  }
 }
+
 
 .logo {
   padding: 10px 0;
@@ -122,18 +138,13 @@ export default {
     margin: 36px 0 10px;
     padding: 0;
     font-size: $font-size-base;
-    color: $font-color-base;
+    color: #fff;
     text-align: center;
     outline: none;
-    border: 1px solid $border-color-base;
     border-radius: 4px;
     cursor: pointer;
-    background-color: #fff;
+    background-color: $theme-primary;
     transition: all .5s;
-
-    &:hover {
-      background-color: $primary-light-7;
-    }
   }
 }
 

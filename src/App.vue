@@ -14,11 +14,15 @@ export default {
     }
   },
 
+  mounted() {
+    document.getElementById('loader').style.display = 'none'
+  },
+
   provide() {
     return {
       eventBus: this.eventBus
     }
-  },
+  }
 }
 </script>
 
