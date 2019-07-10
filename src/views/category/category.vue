@@ -154,8 +154,8 @@ export default {
     }
   },
 
-  async created() {
-    await this.getCategories()
+  created() {
+    this.getCategories()
   }
 }
 </script>

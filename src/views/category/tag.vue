@@ -134,8 +134,8 @@ export default {
     }
   },
 
-  async created() {
-    await this.getTags()
+  created() {
+    this.getTags()
   }
 }
 </script>

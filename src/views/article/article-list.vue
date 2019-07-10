@@ -299,12 +299,12 @@ export default {
     },
   },
 
-  async created() {
+  created() {
     this.loading = true
-    await this.getCategories()
-    await this.getAuthors()
-    await this.getTags()
-    await this.getArticles()
+    this.getCategories()
+    this.getAuthors()
+    this.getTags()
+    this.getArticles()
     this.loading = false
   }
 }

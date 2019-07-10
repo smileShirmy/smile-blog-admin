@@ -158,8 +158,8 @@ export default {
     }
   },
 
-  async created() {
-    await this.getAuthors()
+  created() {
+    this.getAuthors()
   }
 }
 </script>
