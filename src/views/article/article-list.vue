@@ -204,7 +204,7 @@ export default {
         createdDate: data.created_date,
         cover: data.cover,
         content: '',
-        categoryId: data.category_id,
+        categoryId: data.category.id,
         tags: data.tags.map(v => v.id),
         public: data.public,
         status: data.status,

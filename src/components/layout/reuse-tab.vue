@@ -171,6 +171,7 @@ export default {
     padding: 0 1em;
     font-size: $font-size-base;
     color: $font-color-gray;
+    white-space: nowrap;
 
     .title {
       margin: 0 5px;
@@ -180,5 +181,11 @@ export default {
   .active {
     color: #fff;
   }
+}
+</style>
+<style>
+.swiper-wrapper {
+  display: flex;
+  justify-content: flex-start;
 }
 </style>

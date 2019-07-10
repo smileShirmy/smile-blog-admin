@@ -105,40 +105,22 @@
               ></el-date-picker>
             </el-form-item>
             <el-form-item label="公开" prop="public">
-              <el-select
-                v-model="form.public"
-                filterable
-                allow-create
-                size="medium"
-                placeholder="请选择是否公开"
-              >
-                <el-option :key="1" :label="'公开'" :value="1"></el-option>
-                <el-option :key="2" :label="'私密'" :value="2"></el-option>
-              </el-select>
+              <el-radio-group v-model="form.public">
+                <el-radio :label="1">公开</el-radio>
+                <el-radio :label="2">私密</el-radio>
+              </el-radio-group>
             </el-form-item>
             <el-form-item label="发布" prop="status">
-              <el-select
-                v-model="form.status"
-                filterable
-                allow-create
-                size="medium"
-                placeholder="请选择是否发布"
-              >
-                <el-option :key="1" :label="'发布'" :value="1"></el-option>
-                <el-option :key="2" :label="'草稿'" :value="2"></el-option>
-              </el-select>
+              <el-radio-group v-model="form.status">
+                <el-radio :label="1">发布</el-radio>
+                <el-radio :label="2">草稿</el-radio>
+              </el-radio-group>
             </el-form-item>
-            <el-form-item label="精选" prop="status">
-              <el-select
-                v-model="form.status"
-                filterable
-                allow-create
-                size="medium"
-                placeholder="请选择是为精选文章"
-              >
-                <el-option :key="1" :label="'非精选'" :value="1"></el-option>
-                <el-option :key="2" :label="'精选'" :value="2"></el-option>
-              </el-select>
+            <el-form-item label="精选" prop="star">
+              <el-radio-group v-model="form.star">
+                <el-radio :label="1">非精选</el-radio>
+                <el-radio :label="2">精选</el-radio>
+              </el-radio-group>
             </el-form-item>
             <el-form-item label="内容" prop="content">
               <el-input

@@ -1,6 +1,6 @@
 <template>
-  <div>
-    blog config
+  <div class="container">
+    #虚弱而赤城地拥抱世界#
   </div>
 </template>
 
@@ -9,3 +9,11 @@ export default {
   
 }
 </script>
+
+<style lang="scss" scoped>
+.container {
+  box-sizing: border-box;
+  padding: 30px;
+}
+</style>
+
