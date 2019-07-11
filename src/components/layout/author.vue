@@ -210,7 +210,7 @@ export default {
         return
       }
       const imgFile = evt.target.files[0]
-      // 验证文件大小是否符合要求, 不大于 5M
+      // 验证文件大小是否符合要求, 不大于 2M
       if (imgFile.size > 1024 * 1024 * 2) {
         this.$message.error('文件过大超过2M')
         // 清空输入框
@@ -226,13 +226,13 @@ export default {
         const w = image.width
         const h = image.height
         if (w < 50) {
-          this.$message.error('图像宽度过小, 请选择大于50px的图像')
+          this.$message.error('图片宽度过小, 请选择大于50px的图像')
           // 清空输入框
           this.clearFileInput(this.$refs.avatarInput)
           return
         }
         if (h < 50) {
-          this.$message.error('图像高度过小, 请选择大于50px的图像')
+          this.$message.error('图片高度过小, 请选择大于50px的图像')
           // 清空输入框
           this.clearFileInput(this.$refs.avatarInput)
           return
@@ -245,7 +245,7 @@ export default {
         }
         this.clearFileInput(this.$refs.avatarInput)
       }
-        image.onerror = () => {
+      image.onerror = () => {
         this.$message.error('获取本地图片出现错误, 请重试')
         // 清空输入框
         this.clearFileInput(this.$refs.avatarInput)

@@ -12,11 +12,8 @@
       <el-form-item label="作者名" prop="name">
         <el-input size="medium" clearable v-model="form.name" :disabled="!isEdited"></el-input>
       </el-form-item>
-      <el-form-item label="头像" prop="avatar">
-        <el-input
-          v-model="form.avatar"
-          size="medium"
-        ></el-input>
+      <el-form-item v-if="infoType === 'add'" label="头像" prop="avatar">
+        <Upload ref="upload"></Upload>
       </el-form-item>
       <el-form-item label="邮箱" prop="email">
         <el-input
@@ -67,8 +64,13 @@
 
 <script>
 import author from '@/services/models/author'
+import Upload from '@/components/base/upload'
 
 export default {
+  components: {
+    Upload
+  },
+
   props: {
     isSubmit: {
       type: Boolean,
@@ -95,6 +97,9 @@ export default {
     const checkName = (rule, value, callback) => {
       if (!value) {
         callback(new Error('用户名不能为空'))
+      }
+      if (value.length < 4 || value.length > 32) {
+        callback(new Error('作者名要在4到32个字符之间'))
       }
       callback()
     }
@@ -148,9 +153,7 @@ export default {
         ],
         avatar: [
           {
-            type: 'url',
-            message: '请输入正确的头像地址',
-            trigger: 'blur',
+            message: '头像不能为空',
             required: true
           }
         ],
@@ -176,7 +179,13 @@ export default {
   },
   
   methods: {
-    submitForm(formName) {
+    async submitForm(formName) {
+      if (this.infoType === 'add' && !this.form.avatar) {
+        // 新增用户，获取上传图片地址
+        const imgUrl = await this.$refs.upload.handleCrop(`${this.form.name}-avatar`)
+        this.form.avatar = imgUrl
+      }
+
       this.$refs[formName].validate(async (valid) => {
         if (valid) {
           if (this.infoType === 'add') {
@@ -196,6 +205,8 @@ export default {
                 this.loading = false
                 this.$message.success(`${res.msg}`)
                 this.resetForm(formName)
+                this.$refs.upload.showCroppa = false
+                this.$refs.upload.cropImg = ''
               } else {
                 this.loading = false
                 this.$message.error(`${res.msg}`)
@@ -206,7 +217,7 @@ export default {
             }
           } else {
             // 修改用户信息
-            if (this.form.avatar === this.info.avatar && this.form.email === this.info.email && this.form.description === this.info.description && this.form.auth === this.info.auth) {
+            if (this.form.email === this.info.email && this.form.description === this.info.description && this.form.auth === this.info.auth) {
               this.$emit('handleInfoResult', false)
               return
             }
@@ -214,7 +225,7 @@ export default {
               avatar: this.form.avatar,
               email: this.form.email,
               description: this.form.description,
-              auth: 8
+              auth: 8 // 普通用户权限
             }
             try {
               const res = await author.updateAuthor(data, this.id)
