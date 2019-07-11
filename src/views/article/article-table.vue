@@ -155,6 +155,7 @@ export default {
         this.loading = false
       } catch (e) {
         this.loading = false
+        // eslint-disable-next-line no-console
         console.log(e)
       }
     },
@@ -178,6 +179,7 @@ export default {
         this.loading = false
       } catch (e) {
         this.loading = false
+        // eslint-disable-next-line no-console
         console.log(e)
       }
     },
@@ -206,6 +208,7 @@ export default {
           }
         } catch (e) {
           this.loading = false
+          // eslint-disable-next-line no-console
           console.log(e)
         }
       }).catch(() => {

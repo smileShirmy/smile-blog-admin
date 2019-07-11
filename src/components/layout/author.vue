@@ -303,6 +303,7 @@ export default {
         const author = await Author.getAuthorInfo()
         this.setAuthorAndState(author)
       } catch (e) {
+        // eslint-disable-next-line no-console
         console.log(e) 
       }
     },
@@ -350,6 +351,7 @@ export default {
             }
           } catch (e) {
             this.loading = false
+            // eslint-disable-next-line no-console
             console.log(e)  
           }
         }

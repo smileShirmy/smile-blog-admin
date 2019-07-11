@@ -99,6 +99,7 @@ function insertItem(item, arr) {
  */
 Utils.sortByOrder = (source = []) => {
   if (!Array.isArray(source)) {
+    // eslint-disable-next-line no-console
     console.error('sortByOrder 传入参数不符合要求, 应为数组', source)
     return source
   }

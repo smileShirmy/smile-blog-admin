@@ -216,6 +216,7 @@ export default {
         this.form = edit
         this.isEdit = true
       } catch (e) {
+        // eslint-disable-next-line no-console
         console.log(e)
       }
     },
@@ -255,6 +256,7 @@ export default {
         this.tableLoading = false
       } catch (e) {
         this.tableLoading = false
+        // eslint-disable-next-line no-console
         console.log(e)
       }
     },
@@ -268,6 +270,7 @@ export default {
         })
         this.categories = res
       } catch (e) {
+        // eslint-disable-next-line no-console
         console.log(e)
       }
     },
@@ -281,6 +284,7 @@ export default {
         })
         this.authors = res
       } catch (e) {
+        // eslint-disable-next-line no-console
         console.log(e)
       }
     },
@@ -294,6 +298,7 @@ export default {
         })
         this.tags = res
       } catch (e) {
+        // eslint-disable-next-line no-console
         console.log(e)
       }
     },

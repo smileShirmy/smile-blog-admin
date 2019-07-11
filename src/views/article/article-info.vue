@@ -253,6 +253,7 @@ export default {
               }
             } catch (e) {
               this.loading = false
+              // eslint-disable-next-line no-console
               console.log(e)
             }
           } else {
@@ -262,7 +263,7 @@ export default {
               return
             }
             try {
-              console.log(this.form)
+              // eslint-disable-next-line no-console
               const res = await article.updateArticle(this.form)
               if (res.errorCode === 0) {
                 this.$message.success(`${res.msg}`)
@@ -271,6 +272,7 @@ export default {
                 this.$message.error(`${res.msg}`)
               }
             } catch (e) {
+              // eslint-disable-next-line no-console
               console.log(e)
             }
           }
@@ -307,6 +309,7 @@ export default {
       try {
         this.categories = await category.getCategories()
       } catch (e) {
+        // eslint-disable-next-line no-console
         console.log(e)
       }
     },
@@ -315,6 +318,7 @@ export default {
       try {
         this.tags = await tag.getTags()
       } catch (e) {
+        // eslint-disable-next-line no-console
         console.log(e)
       }
     },
@@ -323,6 +327,7 @@ export default {
       try {
         this.authors = await author.getAuthors()
       } catch (e) {
+        // eslint-disable-next-line no-console
         console.log(e)
       }
     },
