@@ -1,4 +1,5 @@
-import { throttle } from 'lodash'
+// 按需引入loadsh
+import throttle from 'lodash/throttle'
 
 const Utils = {}
 

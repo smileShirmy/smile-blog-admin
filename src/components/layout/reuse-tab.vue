@@ -1,9 +1,9 @@
 <template>
   <div v-if="histories.length > 1">
-    <swiper :options="swiperOption" class="reuse-tab-wrapper">
-      <swiper-slide v-for="(item, index) in histories" :key="item.path">
+    <ul class="reuse-tab-wrapper">
+      <li class="reuse-tab-item" v-for="(item, index) in histories" :key="item.path">
         <router-link
-          class="reuse-tab-item"
+          class="reuse-tab-link"
           :class="item.path === $route.path ? 'active' : ''"
           :to="item.path"
           @contextmenu.prevent.native="onTags">
@@ -11,37 +11,20 @@
           <span class="title">{{ stageList[item.stageId].title | filterTitle }}</span>
           <span class="el-icon-close" @click.prevent.stop="close(index)" />
         </router-link>
-      </swiper-slide>
-    </swiper>
+      </li>
+    </ul>
   </div>
 </template>
 
 <script>
 import { mapGetters } from 'vuex'
-import { swiper, swiperSlide } from 'vue-awesome-swiper'
 
 export default {
-  components: {
-    swiper,
-    swiperSlide
-  },
-
   inject: ['eventBus'],
 
   data() {
     return {
       histories: [],
-      swiperOption: {
-        slidesPerView: 'auto',
-        initialSlide: 0,
-        effect: 'slide',
-        spaceBetween: 1,
-        preventClicks: false,
-        freeMode: true,
-        mousewheel: {
-          sensitivity: 1.5,
-        },
-      },
     }
   },
 
@@ -152,25 +135,34 @@ export default {
 <style lang="scss" scoped>
 @import "@/assets/scss/variables.scss";
 
-.swiper-slide {
-  display: inline-block;
-  height: 26px;
-  line-height: 26px;
-  text-align: center;
-  background-color: $background-color-sidebar;
-}
-
 .reuse-tab-wrapper {
   display: flex;
   justify-content: flex-start;
-  align-items: center;
-  margin-bottom: 2px;
+  overflow-x: auto;
+  height: 25px;
+  
+  &::-webkit-scrollbar {
+    width: 0;
+    height: 0;
+  }
 
   .reuse-tab-item {
+    margin-right: 1px;
+
+    &:last-child {
+      margin-right: 0;
+    }
+  }
+
+  .reuse-tab-link {
     box-sizing: border-box;
+    display: flex;
+    align-items: center;
+    height: 25px;
     padding: 0 1em;
     font-size: $font-size-base;
     color: $font-color-gray;
+    background-color: $theme-primary;
     white-space: nowrap;
 
     .title {
@@ -179,13 +171,8 @@ export default {
   }
 
   .active {
-    color: #fff;
+    color: $theme-primary;
+    background-color: $reuse-tab-bg;
   }
-}
-</style>
-<style>
-.swiper-wrapper {
-  display: flex;
-  justify-content: flex-start;
 }
 </style>
