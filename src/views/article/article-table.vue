@@ -1,6 +1,9 @@
 <template>
   <div>
-    <el-table :data="articleData" v-loading="loading">
+    <el-table
+      :data="articleData"
+      v-loading="loading"
+    >
       <el-table-column type="expand">
         <template slot-scope="props">
           <el-form
@@ -16,7 +19,11 @@
               <span>{{ props.row.views }}</span>
             </el-form-item>
             <el-form-item label="标签">
-              <span class="tag-item" v-for="tag in props.row.tags" :key="tag.id">
+              <span
+                class="tag-item"
+                v-for="tag in props.row.tags"
+                :key="tag.id"
+              >
                 {{ tag.name }}
               </span>
             </el-form-item>
@@ -24,7 +31,10 @@
               <span>{{ props.row.like }}</span>
             </el-form-item>
             <el-form-item label="封面">
-              <img class="cover" :src="props.row.cover">
+              <img
+                class="cover"
+                :src="props.row.cover"
+              >
             </el-form-item>
             <el-form-item label="描述">
               <span>{{ props.row.description }}</span>
@@ -32,21 +42,26 @@
           </el-form>
         </template>
       </el-table-column>
-      <el-table-column prop="title" label="标题"></el-table-column>
+      <el-table-column
+        prop="title"
+        label="标题"
+      ></el-table-column>
       <el-table-column
         prop="created_date"
         label="发布时间"
         sortable
         width="170"
       ></el-table-column>
-      <el-table-column prop="authors" label="作者">
+      <el-table-column
+        prop="authors"
+        label="作者"
+      >
         <template slot-scope="scope">
           <span
             class="author-item"
             v-for="author in scope.row.authors"
             :key="author.id"
-            >{{ author.name }}</span
-          >
+          >{{ author.name }}</span>
         </template>
       </el-table-column>
       <el-table-column
@@ -64,29 +79,62 @@
         label="设为精选"
       >
         <template slot-scope="scope">
-          <i :class="['star el-icon-star-off', scope.row.star === 2 ? 'star-on' : '']" @click="setArticleStar(scope.row)"></i>
+          <i
+            :class="['star el-icon-star-off', scope.row.star === 2 ? 'star-on' : '']"
+            @click="setArticleStar(scope.row)"
+          ></i>
         </template>
       </el-table-column>
-      <el-table-column label="操作" fixed="right" width="250">
+      <el-table-column
+        label="操作"
+        fixed="right"
+        width="250"
+      >
         <template slot-scope="scope">
-          <el-button type="primary" size="mini" @click="editArticle(scope.row)"
-            >编辑</el-button
-          >
-          <el-button type="primary" size="mini" @click="setArticlePrivate(scope.row)"
-            >{{scope.row.public === 1 ? '私密' : '公开'}}</el-button
-          >
-          <el-button type="primary" size="mini" @click="showComments(scope.row)"
-            >评论</el-button
-          >
-          <el-button type="danger" size="mini" @click="deleteArticle(scope.row)"
-            >删除</el-button
-          >
+          <el-button
+            type="primary"
+            size="mini"
+            @click="editArticle(scope.row)"
+          >编辑</el-button>
+          <el-button
+            type="primary"
+            size="mini"
+            @click="setArticlePrivate(scope.row)"
+          >{{scope.row.public === 1 ? '私密' : '公开'}}</el-button>
+          <el-button
+            v-if="scope.row.comment_count"
+            type="primary"
+            size="mini"
+            @click="showComments(scope.row)"
+          >评论</el-button>
+          <el-button
+            type="danger"
+            size="mini"
+            @click="deleteArticle(scope.row)"
+          >删除</el-button>
         </template>
       </el-table-column>
     </el-table>
+    <div class="pagination">
+        <el-pagination
+          @current-change="handleCurrentChange"
+          layout="prev, pager, next, jumper"
+          :total="total"
+          :background="true"
+          :page-size="pageSize"
+          :currentPage="currentPage"
+        ></el-pagination>
+      </div>
     <!-- 评论弹窗 -->
-    <el-dialog append-to-body :visible.sync="dialogVisible" :before-close="handleClose">
-      <comments v-if="dialogVisible" :id="currentId"></comments>
+    <el-dialog
+      append-to-body
+      :visible.sync="dialogVisible"
+      :before-close="handleClose"
+    >
+      <comments
+        v-if="dialogVisible"
+        :id="currentId"
+      ></comments>
     </el-dialog>
   </div>
 </template>
@@ -114,6 +162,16 @@ export default {
     articleData: {
       type: Array,
       default: () => []
+    },
+
+    currentPage: {
+      type: Number,
+      default: 0
+    },
+
+    total: {
+      type: Number,
+      default: 0
     }
   },
 
@@ -124,10 +182,15 @@ export default {
       publicMap,
       statusMap,
       dialogVisible: false,
+      pageSize: 10,
     }
   },
 
   methods: {
+    handleCurrentChange(page) {
+      this.$emit('handleCurrentPage', page)
+    },
+
     handleClose() {
       this.dialogVisible = false
     },
@@ -256,5 +319,11 @@ export default {
 
 .star-on {
   color: #4093ff;
+}
+
+.pagination {
+  display: flex;
+  justify-content: flex-end;
+  margin: 20px;
 }
 </style>

@@ -106,7 +106,13 @@
         </dl>
       </el-card>
       <el-card class="list-wrapper" v-loading="tableLoading">
-        <article-table :articleData="articleData" @handleInfoResult="onHandleInfoResult" @handleEdit="onHandleEdit"></article-table>
+        <article-table
+          :total="total"
+          :articleData="articleData"
+          :currentPage="currentPage"
+          @handleInfoResult="onHandleInfoResult"
+          @handleEdit="onHandleEdit"
+          @handleCurrentPage="onHandleCurrentPage"></article-table>
       </el-card>
     </div>
     <div v-if="isEdit">
@@ -139,6 +145,7 @@ export default {
 
   data() {
     return {
+      currentPage: 1,
       total: 0,
       isEdit: false,
       loading: false,
@@ -180,6 +187,10 @@ export default {
       }
       this[target] = id
       this.getArticles()
+    },
+
+    onHandleCurrentPage(page) {
+      this.getArticles(page - 1)
     },
 
     onHandleInfoResult(flag) {
@@ -233,7 +244,7 @@ export default {
       this.getArticles()
     },
 
-    async getArticles() {
+    async getArticles(page = 0) {
       try {
         this.tableLoading = true
         let params = {
@@ -242,7 +253,8 @@ export default {
           tagId: this.tagId,
           publicId: this.publicId,
           statusId: this.statusId,
-          starId: this.starId
+          starId: this.starId,
+          page
         }
         if (this.searchVal) {
           params.search = this.searchVal
@@ -251,6 +263,7 @@ export default {
         articles.forEach(v => {
           v.created_date = Utils.timestampToTime(v.created_date)
         })
+        this.currentPage = page + 1
         this.total = total
         this.articleData = articles
         this.tableLoading = false
