@@ -210,7 +210,7 @@ export default {
           { trigger: 'blur', message: '请选择创建时间', required: true}
         ],
         cover: [
-          { type: 'url', trigger: 'blur', message: '请输入正确的封面地址', required: true }
+          { type: 'url', trigger: 'blur', message: '请输入正确的封面地址'}
         ],
         content: [
           { trigger: 'blur', message: '请输入文章内容', required: true }

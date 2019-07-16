@@ -30,7 +30,7 @@
             <el-form-item label="赞">
               <span>{{ props.row.like }}</span>
             </el-form-item>
-            <el-form-item label="封面">
+            <el-form-item v-if="props.row.cover" label="封面">
               <img
                 class="cover"
                 :src="props.row.cover"
