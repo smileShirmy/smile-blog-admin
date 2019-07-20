@@ -8,13 +8,9 @@ branches:
   - master
 install:
 - npm install
-script:
-- npm run build
 before_install:
-- openssl aes-256-cbc -K $encrypted_3643358f8e90_key -iv $encrypted_3643358f8e90_iv -in id_rsa.enc -out ~/.ssh/id_rsa -d
-- eval "$(ssh-agent -s)"
+- openssl aes-256-cbc -K $encrypted_794d9bd6dd1e_key -iv $encrypted_794d9bd6dd1e_iv -in id_rsa.enc -out ~/.ssh/id_rsa -d
 - chmod 600 ~/.ssh/id_rsa
-- ssh-add ~/.ssh/id_rsa
 after_success:
 - ssh "$DEPLOY_USER"@"$DEPLOY_HOST" -o StrictHostKeyChecking=no 'cd /data/smile-blog-admin && git pull && bash ./script/deploy.sh'
 addons:
