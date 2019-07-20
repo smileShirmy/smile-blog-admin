@@ -1,3 +1,7 @@
+/**
+ * https://github.com/TaleLin/lin-cms-vue/blob/master/src/lin/plugins/axios.js
+ */
+
 import Vue from 'vue'
 import axios from 'axios'
 import Config from '@/config/index'
@@ -46,11 +50,12 @@ _axios.interceptors.request.use(originConfig => {
     }
 
     let hasFile = false
-    Object.keys(reqConfig.data).forEach(key => {
+    Object.keys(reqConfig.data).forEach((key) => {
       if (typeof reqConfig.data[key] === 'object') {
-        if (reqConfig.data[key] instanceof FileList || reqConfig.data[key] instanceof File || reqConfig.data[key] instanceof Blob) {
+        const item = reqConfig.data[key]
+        if (item instanceof FileList || item instanceof File || item instanceof Blob) {
           hasFile = true
-        } else if (reqConfig.data[key].constructor === Object) {
+        } else if (Object.prototype.toString.call(item) === '[object Object]') {
           reqConfig.data[key] = JSON.stringify(reqConfig.data[key])
         }
       }
