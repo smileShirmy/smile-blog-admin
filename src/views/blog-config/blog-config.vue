@@ -1,19 +1,24 @@
 <template>
-  <div class="container">
-    #虚弱而赤城地拥抱世界#
+  <div>
+    <div class="view-title">全局管理</div>
+    <friend></friend>
   </div>
 </template>
 
 <script>
+import Friend from './friend'
+
 export default {
-  
+  components: {
+    Friend
+  }
 }
 </script>
 
 <style lang="scss" scoped>
-.container {
-  box-sizing: border-box;
-  padding: 30px;
+@import '@/assets/scss/mixin.scss';
+
+.view-title {
+  @include view-common-title;
 }
 </style>
-

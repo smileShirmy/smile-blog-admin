@@ -201,7 +201,7 @@ export default {
           { trigger: 'blur', message: '请输入标题', required: true }
         ],
         authors: [
-          { trigger: 'change', message: '请选择作者', required: true}
+          { trigger: 'change', message: '请选择作者', required: true }
         ],
         description: [
           { trigger: 'blur', message: '请输入描述', required: true }

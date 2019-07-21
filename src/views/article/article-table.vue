@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="article-table">
     <el-table
       :data="articleData"
       v-loading="loading"

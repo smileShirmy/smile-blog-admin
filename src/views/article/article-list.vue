@@ -392,7 +392,7 @@ export default {
 }
 
 .list-wrapper {
-  margin: 0 30px;
+  margin: 0 30px 20px;
 
   .author-item {
     margin-right: 4px;
