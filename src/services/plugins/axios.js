@@ -40,7 +40,7 @@ _axios.interceptors.request.use(originConfig => {
   // 大小写
   reqConfig.method = reqConfig.method.toLowerCase()
 
-  if (reqConfig.methods === 'get') {
+  if (reqConfig.method === 'get') {
     if (!reqConfig.params) {  // 防止字段用错
       reqConfig.params = reqConfig.data || {}
     } 
