@@ -50,7 +50,7 @@ class Article {
 
   // 获取某篇文章的内容
   async getContent(id) {
-    const res = await get(`v1/article/content?id=${id}`)
+    const res = await get(`v1/article?id=${id}`)
     return res
   }
 
