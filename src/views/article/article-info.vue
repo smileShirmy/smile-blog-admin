@@ -120,9 +120,22 @@
                 :autosize="{ minRows: 10, maxRows: 14 }"
                 placeholder="请输入文章内容"
               ></el-input>
+<<<<<<< HEAD
             </el-form-item>-->
             <el-form-item label="文章内容" prop="content">
               <mavon-editor v-model="form.content" />
+=======
+            </el-form-item> -->
+            <el-form-item
+              label="文章内容"
+              prop="content"
+            >
+              <mavon-editor
+                @imgAdd="$imgAdd"
+                :autofocus="false"
+                v-model="form.content"
+              />
+>>>>>>> 2ec767ac30ed65b891598ae1efefb93450b2f732
             </el-form-item>
             <el-form-item>
               <el-button type="primary" @click.stop="submitForm('form')">保 存</el-button>
@@ -141,6 +154,7 @@ import tag from "@/services/models/tag";
 import author from "@/services/models/author";
 import article from "@/services/models/article";
 import Config from "@/config/index"
+import common from "@/services/models/common";
 
 export default {
   props: {
@@ -178,7 +192,7 @@ export default {
         title: "",
         authors: [],
         description: "",
-        createdDate: "",
+        createdDate: new Date(),
         cover: "",
         content: "",
         categoryId: "",
@@ -281,6 +295,15 @@ export default {
         }
       }
       return isEquel;
+    },
+
+    // 图片上传
+    async $imgAdd(pos, $file) {
+      var formdata = new FormData();
+      formdata.append("image", $file);
+      const result = await common.upLoad(formdata);
+      console.log(result);
+      // $vm.$img2Url(pos, url);
     },
 
     resetForm(formName) {

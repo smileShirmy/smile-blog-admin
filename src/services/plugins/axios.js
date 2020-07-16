@@ -12,7 +12,7 @@ import author from '@/services/models/author'
 
 const config = {
   baseURL: Config.baseUrl,
-  timeout: 5 * 1000,
+  timeout: 8 * 1000,
   crossDomain: true,
   validateStatus(status) {
     return status >= 200 && status < 500
@@ -43,7 +43,7 @@ _axios.interceptors.request.use(originConfig => {
   if (reqConfig.method === 'get') {
     if (!reqConfig.params) {  // 防止字段用错
       reqConfig.params = reqConfig.data || {}
-    } 
+    }
   } else if (reqConfig.method === 'post') {
     if (!reqConfig.data) {
       reqConfig.data = reqConfig.params || {}
@@ -133,7 +133,7 @@ _axios.interceptors.response.use(async (res) => {
         return
       }
     }
-    
+
     Vue.prototype.$message({
       message: msg || '未知的errorCode',
       type: 'error',
