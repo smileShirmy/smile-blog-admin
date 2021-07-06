@@ -13,12 +13,7 @@
     </div>
     <div class="form-wrapper">
       <el-row>
-        <el-col
-          :lg="23"
-          :md="23"
-          :sm="24"
-          :xs="24"
-        >
+        <el-col :lg="23" :md="23" :sm="24" :xs="24">
           <el-form
             :model="form"
             ref="form"
@@ -29,30 +24,18 @@
             v-loading="loading"
             :rules="rules"
           >
-            <el-form-item
-              label="标题"
-              prop="title"
-            >
-              <el-input
-                v-model="form.title"
-                size="medium"
-                placeholder="请输入标题"
-              ></el-input>
+            <el-form-item label="标题" prop="title">
+              <el-input v-model="form.title" size="medium" placeholder="请输入标题"></el-input>
             </el-form-item>
-            <el-form-item
-              label="封面"
-              prop="cover"
-            >
-              <el-input
-                v-model="form.cover"
-                size="medium"
-                placeholder="请输入封面地址"
-              ></el-input>
+            <el-form-item label="封面" prop="cover">
+              <el-input v-model="form.cover" size="medium" placeholder="请输入封面地址"></el-input>
+              <el-upload
+                :action="uploadUrl"
+              >
+                <el-button size="small" type="primary">点击上传</el-button>
+              </el-upload>
             </el-form-item>
-            <el-form-item
-              label="描述"
-              prop="description"
-            >
+            <el-form-item label="描述" prop="description">
               <el-input
                 type="textarea"
                 v-model="form.description"
@@ -62,10 +45,7 @@
                 show-word-limit
               ></el-input>
             </el-form-item>
-            <el-form-item
-              label="作者"
-              prop="authors"
-            >
+            <el-form-item label="作者" prop="authors">
               <el-select
                 v-model="form.authors"
                 multiple
@@ -79,33 +59,20 @@
                   :key="author.id"
                   :label="author.name"
                   :value="author.id"
-                >
-                </el-option>
+                ></el-option>
               </el-select>
             </el-form-item>
-            <el-form-item
-              label="分类"
-              prop="categoryId"
-            >
-              <el-select
-                v-model="form.categoryId"
-                filterable
-                size="medium"
-                placeholder="请选择分类"
-              >
+            <el-form-item label="分类" prop="categoryId">
+              <el-select v-model="form.categoryId" filterable size="medium" placeholder="请选择分类">
                 <el-option
                   v-for="category in categories"
                   :key="category.id"
                   :value="category.id"
                   :label="category.name"
-                >
-                </el-option>
+                ></el-option>
               </el-select>
             </el-form-item>
-            <el-form-item
-              label="标签"
-              prop="tags"
-            >
+            <el-form-item label="标签" prop="tags">
               <el-select
                 v-model="form.tags"
                 multiple
@@ -114,19 +81,10 @@
                 size="medium"
                 placeholder="请选择标签"
               >
-                <el-option
-                  v-for="tag in tags"
-                  :key="tag.id"
-                  :label="tag.name"
-                  :value="tag.id"
-                >
-                </el-option>
+                <el-option v-for="tag in tags" :key="tag.id" :label="tag.name" :value="tag.id"></el-option>
               </el-select>
             </el-form-item>
-            <el-form-item
-              label="时间"
-              prop="createdDate"
-            >
+            <el-form-item label="时间" prop="createdDate">
               <el-date-picker
                 v-model="form.createdDate"
                 size="medium"
@@ -134,28 +92,19 @@
                 :editable="false"
               ></el-date-picker>
             </el-form-item>
-            <el-form-item
-              label="公开"
-              prop="public"
-            >
+            <el-form-item label="公开" prop="public">
               <el-radio-group v-model="form.public">
                 <el-radio :label="1">公开</el-radio>
                 <el-radio :label="2">私密</el-radio>
               </el-radio-group>
             </el-form-item>
-            <el-form-item
-              label="发布"
-              prop="status"
-            >
+            <el-form-item label="发布" prop="status">
               <el-radio-group v-model="form.status">
                 <el-radio :label="1">发布</el-radio>
                 <el-radio :label="2">草稿</el-radio>
               </el-radio-group>
             </el-form-item>
-            <el-form-item
-              label="精选"
-              prop="star"
-            >
+            <el-form-item label="精选" prop="star">
               <el-radio-group v-model="form.star">
                 <el-radio :label="1">非精选</el-radio>
                 <el-radio :label="2">精选</el-radio>
@@ -171,6 +120,11 @@
                 :autosize="{ minRows: 10, maxRows: 14 }"
                 placeholder="请输入文章内容"
               ></el-input>
+<<<<<<< HEAD
+            </el-form-item>-->
+            <el-form-item label="文章内容" prop="content">
+              <mavon-editor v-model="form.content" />
+=======
             </el-form-item> -->
             <el-form-item
               label="文章内容"
@@ -181,16 +135,11 @@
                 :autofocus="false"
                 v-model="form.content"
               />
+>>>>>>> 2ec767ac30ed65b891598ae1efefb93450b2f732
             </el-form-item>
             <el-form-item>
-              <el-button
-                type="primary"
-                @click.stop="submitForm('form')"
-              >保 存</el-button>
-              <el-button
-                type="primary"
-                @click="preview"
-              >预 览</el-button>
+              <el-button type="primary" @click.stop="submitForm('form')">保 存</el-button>
+              <el-button type="primary" @click="preview">预 览</el-button>
             </el-form-item>
           </el-form>
         </el-col>
@@ -204,6 +153,7 @@ import category from "@/services/models/category";
 import tag from "@/services/models/tag";
 import author from "@/services/models/author";
 import article from "@/services/models/article";
+import Config from "@/config/index"
 import common from "@/services/models/common";
 
 export default {
@@ -237,6 +187,7 @@ export default {
   data() {
     return {
       loading: false,
+      uploadUrl:Config.baseUrl+'/v1/file',
       form: {
         title: "",
         authors: [],
