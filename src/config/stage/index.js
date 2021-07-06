@@ -17,7 +17,7 @@ import author from './author'
 
 let homeRouter = [
   {
-    title: '夏季指南',
+    title: '夏日谜语',
     type: 'view',
     name: Symbol('about'),
     route: '/about',

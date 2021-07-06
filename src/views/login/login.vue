@@ -3,7 +3,7 @@
     <div class="overlay"></div>
     <el-card class="card" v-loading="loading" element-loading-background="rgba(0, 0, 0, 0)">
       <header class="logo">
-        夏季指南
+        夏日谜语
       </header>
       <form class="form-box" @submit.prevent="throttleLogin">
         <div class="form-item">
